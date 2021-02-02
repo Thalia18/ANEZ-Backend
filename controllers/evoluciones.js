@@ -31,7 +31,7 @@ const getEvolucionById = async (req, res) => {
       where: { evolucion_id: id },
       include: [
         {
-          model: models.historiasclinicas,
+          model: models.historias_clinicas,
           as: 'historiaclinica',
         },
       ],

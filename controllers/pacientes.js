@@ -34,9 +34,9 @@ const getPacienteById = async (req, res) => {
           model: models.etnias,
           as: 'etnias',
         },
-        { model: models.estadosciviles, as: 'estadocivil' },
-        { model: models.nivelesdeinstruccion, as: 'niveldeinstruccion' },
-        { model: models.tiposdesangre, as: 'tipodesangre' },
+        { model: models.estados_civiles, as: 'estadocivil' },
+        { model: models.niveles_de_instruccion, as: 'niveldeinstruccion' },
+        { model: models.tipos_de_sangre, as: 'tipodesangre' },
       ],
     });
     if (pacient) {

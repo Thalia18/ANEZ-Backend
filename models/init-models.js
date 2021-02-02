@@ -13,9 +13,11 @@ var _historias_clinicas = require('./historias_clinicas');
 var _medicos = require('./medicos');
 var _niveles_de_instruccion = require('./niveles_de_instruccion');
 var _pacientes = require('./pacientes');
+var _roles = require('./roles');
 var _subcategorias = require('./subcategorias');
 var _subcategorias_evoluciones = require('./subcategorias_evoluciones');
 var _tipos_de_sangre = require('./tipos_de_sangre');
+var _usuarios = require('./usuarios');
 
 function initModels(sequelize) {
   var capitulos = _capitulos(sequelize, DataTypes);
@@ -32,12 +34,14 @@ function initModels(sequelize) {
   var medicos = _medicos(sequelize, DataTypes);
   var niveles_de_instruccion = _niveles_de_instruccion(sequelize, DataTypes);
   var pacientes = _pacientes(sequelize, DataTypes);
+  var roles = _roles(sequelize, DataTypes);
   var subcategorias = _subcategorias(sequelize, DataTypes);
   var subcategorias_evoluciones = _subcategorias_evoluciones(
     sequelize,
     DataTypes
   );
   var tipos_de_sangre = _tipos_de_sangre(sequelize, DataTypes);
+  var usuarios = _usuarios(sequelize, DataTypes);
 
   medicos.belongsToMany(especialidades, {
     through: especialidades_medicos,
@@ -111,6 +115,10 @@ function initModels(sequelize) {
   subcategorias.hasMany(subcategorias_evoluciones, {
     foreignKey: 'subcategoria_id',
   });
+  usuarios.belongsTo(medicos, { foreignKey: 'medico_id' });
+  medicos.hasMany(usuarios, { foreignKey: 'medico_id' });
+  usuarios.belongsTo(roles, { foreignKey: 'rol_id' });
+  roles.hasMany(usuarios, { foreignKey: 'rol_id' });
 
   return {
     capitulos,
@@ -127,9 +135,11 @@ function initModels(sequelize) {
     medicos,
     niveles_de_instruccion,
     pacientes,
+    roles,
     subcategorias,
     subcategorias_evoluciones,
     tipos_de_sangre,
+    usuarios,
   };
 }
 module.exports = initModels;

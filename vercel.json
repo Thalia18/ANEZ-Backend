@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [{ "src": "/api/index.js", "use": "@now/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "/index.js" }],
+  "env": {
+    "DEV_DATABASE_URL": "@dev_database",
+    "TEST_DATABASE_URL": "@test_database",
+    "DATABASE_URL": "@prod_database"
+  }
+}

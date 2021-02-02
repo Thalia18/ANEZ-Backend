@@ -1,21 +1,21 @@
 const { Router } = require('express');
-const CapituloController = require('../../controllers/capitulos');
-const Categoriaontroller = require('../../controllers/categorias');
-const CitaController = require('../../controllers/citas');
-const ConsultorioController = require('../../controllers/consultorios');
-const EspecialidadController = require('../../controllers/especialidades');
-const EspecialidadMedicoController = require('../../controllers/especialidades_medicos');
-const EstadoCivilController = require('../../controllers/estados_civiles');
-const EtniaController = require('../../controllers/etnias');
+const CapituloController = require('../controllers/capitulos');
+const Categoriaontroller = require('../controllers/categorias');
+const CitaController = require('../controllers/citas');
+const ConsultorioController = require('../controllers/consultorios');
+const EspecialidadController = require('../controllers/especialidades');
+const EspecialidadMedicoController = require('../controllers/especialidades_medicos');
+const EstadoCivilController = require('../controllers/estados_civiles');
+const EtniaController = require('../controllers/etnias');
 const EvolucionController = require('../controllers/evoluciones');
-const FotoController = require('../../controllers/fotos');
-const HistoriaClinicaController = require('../../controllers/historias_clinicas');
-const MedicoController = require('../../controllers/medicos');
-const NivelDeInstruccionController = require('../../controllers/niveles_de_instruccion');
+const FotoController = require('../controllers/fotos');
+const HistoriaClinicaController = require('../controllers/historias_clinicas');
+const MedicoController = require('../controllers//medicos');
+const NivelDeInstruccionController = require('../controllers/niveles_de_instruccion');
 const PacienteController = require('../controllers/pacientes');
-const SubcategoriaEvolucionController = require('../../controllers/subcategorias_evoluciones');
-const SubcategoriaController = require('../../controllers/subcategorias');
-const TipoDeSangreontroller = require('../../controllers/tipos_de_sangre');
+const SubcategoriaEvolucionController = require('../controllers/subcategorias_evoluciones');
+const SubcategoriaController = require('../controllers/subcategorias');
+const TipoDeSangreontroller = require('../controllers/tipos_de_sangre');
 
 const router = Router();
 

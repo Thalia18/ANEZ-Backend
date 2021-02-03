@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node api/index.js",
+    "build": "NODE_ENV=production",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon api/index.js"
   },

@@ -11,11 +11,7 @@ const createSubcategoriaEvolucion = async (req, res) => {
 };
 const getSubcategoriasEvoluciones = async (req, res) => {
   try {
-    const especialidadesMedicos = await models.subcategorias_evoluciones.findAll(
-      {
-        model: models.subcategorias_evoluciones,
-      }
-    );
+    const especialidadesMedicos = await models.subcategorias_evoluciones.findAll();
     let data = pagination(req.query.page, especialidadesMedicos);
     return res.status(200).json({
       info: data.paginate,
@@ -29,16 +25,10 @@ const getSubcategoriasEvoluciones = async (req, res) => {
 const getSubcategoriaEvolucionById = async (req, res) => {
   try {
     const { id } = req.params;
-    const subcategoriaEvolucion = await models.subcategorias_evoluciones.findOne(
+    const subcategoriaEvolucion = await models.subcategorias_evoluciones.findAll(
       {
         where: { evolucion_id: id },
-        // include: [
-        //   {
-        //     model: models.evoluciones,
-        //     as: 'evoluciones',
-        //   },
-        //   { model: models.subcategorias, as: 'subcategorias' },
-        // ],
+        include: [{ model: models.subcategorias, as: 'subcategorias' }],
       }
     );
     if (subcategoriaEvolucion) {

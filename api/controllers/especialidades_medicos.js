@@ -11,9 +11,7 @@ const createEspecialidadMedico = async (req, res) => {
 };
 const getAllEspecialidadesMedicos = async (req, res) => {
   try {
-    const especialidadesMedicos = await models.especialidades_medicos.findAll({
-      model: models.especialidades_medicos,
-    });
+    const especialidadesMedicos = await models.especialidades_medicos.findAll();
     let data = pagination(req.query.page, especialidadesMedicos);
     return res.status(200).json({
       info: data.paginate,
@@ -27,15 +25,8 @@ const getAllEspecialidadesMedicos = async (req, res) => {
 const getEspecialidadMedicoById = async (req, res) => {
   try {
     const { id } = req.params;
-    const especialidadMedico = await models.especialidades_medicos.findOne({
+    const especialidadMedico = await models.especialidades_medicos.findAll({
       where: { medico_id: id },
-      include: [
-        {
-          model: models.medicos,
-          as: 'medicos',
-        },
-        { model: models.especialidades, as: 'especialidades' },
-      ],
     });
     if (especialidadMedico) {
       return res.status(200).json({ data: especialidadMedico });

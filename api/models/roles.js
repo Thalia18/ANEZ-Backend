@@ -9,24 +9,27 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true,
       },
-      nombre_rol: {
+      rol: {
         type: DataTypes.CHAR(50),
         allowNull: false,
       },
-      updated_at: {
+      createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
+        field: 'created_at',
       },
-      created_at: {
+      updatedAt: {
         type: DataTypes.DATE,
         allowNull: true,
+        field: 'updated_at',
       },
     },
     {
       sequelize,
       tableName: 'roles',
       schema: 'public',
-      timestamps: false,
+      underscored: true,
+      timestamps: true,
       indexes: [
         {
           name: 'pk_roles',
@@ -36,5 +39,10 @@ module.exports = function (sequelize, DataTypes) {
       ],
     }
   );
+  Roles.associate = function (models) {
+    Roles.hasMany(models.usuarios, {
+      foreignKey: 'rol_id',
+    });
+  };
   return Roles;
 };

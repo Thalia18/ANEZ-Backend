@@ -11,10 +11,10 @@ const createPaciente = async (req, res) => {
 };
 const getAllPacientes = async (req, res) => {
   try {
-    const pacients = await models.pacientes.findAll({
-      model: models.pacientes,
+    const pacientes = await models.pacientes.findAll({
+      order: [['apellido', 'ASC']],
     });
-    let data = pagination(req.query.page, pacients);
+    let data = pagination(req.query.page, pacientes);
     return res.status(200).json({
       info: data.paginate,
       data: data.result,

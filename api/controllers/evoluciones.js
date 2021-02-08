@@ -11,9 +11,7 @@ const createEvolucion = async (req, res) => {
 };
 const getAllEvoluciones = async (req, res) => {
   try {
-    const evoluciones = await models.evoluciones.findAll({
-      model: models.evoluciones,
-    });
+    const evoluciones = await models.evoluciones.findAll();
     let data = pagination(req.query.page, evoluciones);
     return res.status(200).json({
       info: data.paginate,

@@ -12,7 +12,22 @@ const createCita = async (req, res) => {
 const getAllCitas = async (req, res) => {
   try {
     const citas = await models.citas.findAll({
-      model: models.citas,
+      order: [
+        ['fecha', 'ASC'],
+        ['hora', 'ASC'],
+      ],
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido', 'cedula'],
+          as: 'pacientes',
+        },
+        {
+          model: models.medicos,
+          attributes: ['nombre', 'apellido', 'cedula'],
+          as: 'medicos',
+        },
+      ],
     });
     let data = pagination(req.query.page, citas);
     return res.status(200).json({

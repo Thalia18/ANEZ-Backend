@@ -1,4 +1,6 @@
+const bcrypt = require('bcrypt');
 const Sequelize = require('sequelize');
+
 module.exports = function (sequelize, DataTypes) {
   const Usuarios = sequelize.define(
     'usuarios',
@@ -25,13 +27,22 @@ module.exports = function (sequelize, DataTypes) {
           key: 'rol_id',
         },
       },
-      nombre_u: {
+      usuario: {
         type: DataTypes.CHAR(50),
         allowNull: false,
+        unique: 'unique_usuario',
       },
       contrasena: {
         type: DataTypes.TEXT,
         allowNull: false,
+        set(value) {
+          const hash = bcrypt.hashSync(
+            value,
+            10
+            // Math.floor(Math.random() * (15 - 8 + 1)) + 8
+          );
+          this.setDataValue('contrasena', hash);
+        },
       },
       created_at: {
         type: DataTypes.DATE,
@@ -54,6 +65,11 @@ module.exports = function (sequelize, DataTypes) {
           fields: [{ name: 'usuario_id' }],
         },
         {
+          name: 'unique_usuario',
+          unique: true,
+          fields: [{ name: 'usuario' }],
+        },
+        {
           name: 'usuarios_medicos_fk',
           fields: [{ name: 'medico_id' }],
         },
@@ -69,5 +85,15 @@ module.exports = function (sequelize, DataTypes) {
       ],
     }
   );
+  Usuarios.associate = function (models) {
+    Usuarios.belongsTo(models.medicos, {
+      foreignKey: 'medico_id',
+      as: 'medico',
+    });
+    Usuarios.belongsTo(models.roles, {
+      foreignKey: 'rol_id',
+      as: 'rol',
+    });
+  };
   return Usuarios;
 };

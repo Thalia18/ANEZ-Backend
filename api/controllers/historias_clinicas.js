@@ -11,9 +11,7 @@ const createHistoriaClinica = async (req, res) => {
 };
 const getAllHistoriasClinicas = async (req, res) => {
   try {
-    const historiasClinicas = await models.historias_clinicas.findAll({
-      model: models.historias_clinicas,
-    });
+    const historiasClinicas = await models.historias_clinicas.findAll();
     let data = pagination(req.query.page, historiasClinicas);
     return res.status(200).json({
       info: data.paginate,

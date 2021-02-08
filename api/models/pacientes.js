@@ -52,6 +52,7 @@ module.exports = function (sequelize, DataTypes) {
       cedula: {
         type: DataTypes.CHAR(15),
         allowNull: false,
+        unique: 'unique_cedula',
       },
       fecha_nacimiento: {
         type: DataTypes.DATEONLY,
@@ -77,23 +78,20 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.CHAR(15),
         allowNull: true,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: true,
-        field: 'created_at',
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: true,
-        field: 'updated_at',
       },
     },
     {
       sequelize,
       tableName: 'pacientes',
       schema: 'public',
-      underscored: true,
-      timestamps: true,
+      timestamps: false,
       indexes: [
         {
           name: 'pacientes_pk',
@@ -120,6 +118,11 @@ module.exports = function (sequelize, DataTypes) {
           name: 'pk_pacientes',
           unique: true,
           fields: [{ name: 'paciente_id' }],
+        },
+        {
+          name: 'unique_cedula',
+          unique: true,
+          fields: [{ name: 'cedula' }],
         },
       ],
     }

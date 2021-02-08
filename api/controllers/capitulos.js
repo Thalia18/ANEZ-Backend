@@ -11,9 +11,7 @@ const createCapitulo = async (req, res) => {
 };
 const getAllCapitulos = async (req, res) => {
   try {
-    const capitulos = await models.capitulos.findAll({
-      model: models.capitulos,
-    });
+    const capitulos = await models.capitulos.findAll();
     let data = pagination(req.query.page, capitulos);
     return res.status(200).json({
       info: data.paginate,

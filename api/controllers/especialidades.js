@@ -6,14 +6,14 @@ const createEspecialidad = async (req, res) => {
     await models.especialidades.create(req.body);
     return res.status(201).send('Created');
   } catch (error) {
+    console.log(error);
+
     return res.status(500).json({ error: error.message });
   }
 };
 const getAllEspecialidades = async (req, res) => {
   try {
-    const especialidades = await models.especialidades.findAll({
-      model: models.especialidades,
-    });
+    const especialidades = await models.especialidades.findAll();
     let data = pagination(req.query.page, especialidades);
     return res.status(200).json({
       info: data.paginate,

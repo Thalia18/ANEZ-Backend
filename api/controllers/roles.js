@@ -1,30 +1,30 @@
 const models = require('../models');
 
-const createEtnia = async (req, res) => {
+const createRol = async (req, res) => {
   try {
-    await models.etnias.create(req.body);
+    await models.roles.create(req.body);
     return res.status(200).send('Created');
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
-const getAllEtnias = async (req, res) => {
+const getAllRoles = async (req, res) => {
   try {
-    const etnias = await models.etnias.findAll();
-    return res.status(200).json({ data: etnias });
+    const roles = await models.roles.findAll();
+    return res.status(200).json({ data: roles });
   } catch (error) {
     return res.status(500).send(error.message);
   }
 };
 
-const getEtniaById = async (req, res) => {
+const getRolById = async (req, res) => {
   try {
     const { id } = req.params;
-    const etnia = await models.etnias.findOne({
-      where: { etnia_id: id },
+    const rol = await models.roles.findOne({
+      where: { rol_id: id },
     });
-    if (etnia) {
-      return res.status(200).json({ data: etnia });
+    if (rol) {
+      return res.status(200).json({ data: rol });
     }
     return res.status(404).send('The specified ID does not exists');
   } catch (error) {
@@ -32,15 +32,15 @@ const getEtniaById = async (req, res) => {
   }
 };
 
-const updateEtnia = async (req, res) => {
+const updateRol = async (req, res) => {
   try {
     const { id } = req.params;
-    const [updated] = await models.etnias.update(req.body, {
-      where: { etnia_id: id },
+    const [updated] = await models.roles.update(req.body, {
+      where: { rol_id: id },
     });
     if (updated) {
-      await models.etnias.findOne({
-        where: { etnia_id: id },
+      await models.roles.findOne({
+        where: { rol_id: id },
       });
       return res.status(200).send('Updated');
     }
@@ -50,11 +50,11 @@ const updateEtnia = async (req, res) => {
   }
 };
 
-const deleteEtnia = async (req, res) => {
+const deleteRol = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await models.etnias.destroy({
-      where: { etnia_id: id },
+    const deleted = await models.roles.destroy({
+      where: { rol_id: id },
     });
     if (deleted) {
       return res.status(204).send('Deleted');
@@ -65,9 +65,9 @@ const deleteEtnia = async (req, res) => {
   }
 };
 module.exports = {
-  createEtnia,
-  getAllEtnias,
-  getEtniaById,
-  updateEtnia,
-  deleteEtnia,
+  createRol,
+  getAllRoles,
+  getRolById,
+  updateRol,
+  deleteRol,
 };

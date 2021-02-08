@@ -11,9 +11,7 @@ const createFoto = async (req, res) => {
 };
 const getAllFotos = async (req, res) => {
   try {
-    const fotos = await models.fotos.findAll({
-      model: models.fotos,
-    });
+    const fotos = await models.fotos.findAll();
     let data = pagination(req.query.page, fotos);
     return res.status(200).json({
       info: data.paginate,

@@ -1,18 +1,18 @@
 const models = require('../models');
 const pagination = require('../utils/pagination');
 
-const createMedico = async (req, res) => {
+const createUsuario = async (req, res) => {
   try {
-    await models.medicos.create(req.body);
+    await models.usuarios.create(req.body);
     return res.status(200).send('Created');
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
-const getAllMedicos = async (req, res) => {
+const getAllUsuarios = async (req, res) => {
   try {
-    const medicos = await models.medicos.findAll();
-    let data = pagination(req.query.page, medicos);
+    const usuarios = await models.usuarios.findAll();
+    let data = pagination(req.query.page, usuarios);
     return res.status(200).json({
       info: data.paginate,
       data: data.result,
@@ -22,18 +22,18 @@ const getAllMedicos = async (req, res) => {
   }
 };
 
-const getMedicoById = async (req, res) => {
+const getUsuarioById = async (req, res) => {
   try {
     const { id } = req.params;
-    const medico = await models.medicos.findOne({
-      where: { medico_id: id },
-      include: {
-        model: models.consultorios,
-        as: 'consultorios',
-      },
+    const usuario = await models.usuarios.findOne({
+      where: { usuario_id: id },
+      include: [
+        { model: models.medicos, as: 'medico' },
+        { model: models.roles, as: 'rol' },
+      ],
     });
-    if (medico) {
-      return res.status(200).json({ data: medico });
+    if (usuario) {
+      return res.status(200).json({ usuario });
     }
     return res.status(404).send('The specified ID does not exists');
   } catch (error) {
@@ -41,15 +41,15 @@ const getMedicoById = async (req, res) => {
   }
 };
 
-const updateMedico = async (req, res) => {
+const updateUsuario = async (req, res) => {
   try {
     const { id } = req.params;
-    const [updated] = await models.medicos.update(req.body, {
-      where: { medico_id: id },
+    const [updated] = await models.usuarios.update(req.body, {
+      where: { usuario_id: id },
     });
     if (updated) {
-      await models.medicos.findOne({
-        where: { medico_id: id },
+      await models.usuarios.findOne({
+        where: { usuario_id: id },
       });
       return res.status(200).send('Updated');
     }
@@ -59,11 +59,11 @@ const updateMedico = async (req, res) => {
   }
 };
 
-const deleteMedico = async (req, res) => {
+const deleteUsuario = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await models.medicos.destroy({
-      where: { medico_id: id },
+    const deleted = await models.usuarios.destroy({
+      where: { usuario_id: id },
     });
     if (deleted) {
       return res.status(204).send('Deleted');
@@ -74,9 +74,9 @@ const deleteMedico = async (req, res) => {
   }
 };
 module.exports = {
-  createMedico,
-  getAllMedicos,
-  getMedicoById,
-  updateMedico,
-  deleteMedico,
+  createUsuario,
+  getAllUsuarios,
+  getUsuarioById,
+  updateUsuario,
+  deleteUsuario,
 };

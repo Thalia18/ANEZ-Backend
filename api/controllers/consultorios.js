@@ -11,9 +11,7 @@ const createConsultorio = async (req, res) => {
 };
 const getAllConsultorios = async (req, res) => {
   try {
-    const consultorios = await models.consultorios.findAll({
-      model: models.consultorios,
-    });
+    const consultorios = await models.consultorios.findAll();
     let data = pagination(req.query.page, consultorios);
     return res.status(200).json({
       info: data.paginate,

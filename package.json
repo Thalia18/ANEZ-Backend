@@ -5,23 +5,22 @@
   "main": "index.js",
   "scripts": {
     "start": "node api/index.js",
-    "build": "NODE_ENV=production",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon api/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "pg": "^8.5.1",
-    "pg-hstore": "^2.3.3",
-    "sequelize": "^6.5.0",
-    "sequelize-auto": "^0.7.8"
+    "bcrypt": "5.0.0",
+    "cors": "2.8.5",
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "pg": "8.5.1",
+    "pg-hstore": "2.3.3",
+    "sequelize": "6.5.0",
+    "sequelize-auto": "0.7.8"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "2.0.7"
   },
   "engines": {
     "node": "12.x"

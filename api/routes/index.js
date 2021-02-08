@@ -3,6 +3,7 @@ const CapituloController = require('../controllers/capitulos');
 const Categoriaontroller = require('../controllers/categorias');
 const CitaController = require('../controllers/citas');
 const ConsultorioController = require('../controllers/consultorios');
+const CustomController = require('../controllers/custom');
 const EspecialidadController = require('../controllers/especialidades');
 const EspecialidadMedicoController = require('../controllers/especialidades_medicos');
 const EstadoCivilController = require('../controllers/estados_civiles');
@@ -13,9 +14,11 @@ const HistoriaClinicaController = require('../controllers/historias_clinicas');
 const MedicoController = require('../controllers//medicos');
 const NivelDeInstruccionController = require('../controllers/niveles_de_instruccion');
 const PacienteController = require('../controllers/pacientes');
+const RolController = require('../controllers/roles');
 const SubcategoriaEvolucionController = require('../controllers/subcategorias_evoluciones');
 const SubcategoriaController = require('../controllers/subcategorias');
-const TipoDeSangreontroller = require('../controllers/tipos_de_sangre');
+const TipoDeSangreController = require('../controllers/tipos_de_sangre');
+const UsuarioController = require('../controllers/usuarios');
 
 const router = Router();
 
@@ -48,6 +51,15 @@ router.get('/consultorios', ConsultorioController.getAllConsultorios);
 router.get('/consultorio/:id', ConsultorioController.getConsultorioById);
 router.put('/consultorio/:id', ConsultorioController.updateConsultorio);
 router.delete('/consultorio/:id', ConsultorioController.deleteConsultorio);
+
+//custom routes
+router.get(
+  '/evoluciones_historia/:id',
+  CustomController.getAllEvolucionesPorHistoria
+);
+router.get('/fotos_evolucion/:id', CustomController.getAllFotosPorEvolucion);
+router.get('/confirm_user', CustomController.confirmUser);
+router.get('/autocomplete', CustomController.getAllPacientesAutocomplete);
 
 //especialidades routes
 router.post('/especialidad', EspecialidadController.createEspecialidad);
@@ -164,6 +176,13 @@ router.get('/paciente/:id', PacienteController.getPacienteById);
 router.put('/paciente/:id', PacienteController.updatePaciente);
 router.delete('/paciente/:id', PacienteController.deletePaciente);
 
+//roles routes
+router.post('/rol', RolController.createRol);
+router.get('/roles', RolController.getAllRoles);
+router.get('/rol/:id', RolController.getRolById);
+router.put('/rol/:id', RolController.updateRol);
+router.delete('/rol/:id', RolController.deleteRol);
+
 //subcategorias_evoluciones routes
 router.post(
   '/subcategoria_evolucion',
@@ -194,10 +213,17 @@ router.put('/subcategoria/:id', SubcategoriaController.updateSubcategoria);
 router.delete('/subcategoria/:id', SubcategoriaController.deleteSubcategoria);
 
 //tipos de sangre routes
-router.post('/tipo_de_sangre', TipoDeSangreontroller.createTipoDeSangre);
-router.get('/tipos_de_sangre', TipoDeSangreontroller.getAllTiposDeSangre);
-router.get('/tipo_de_sangre/:id', TipoDeSangreontroller.getTipoDeSangreById);
-router.put('/tipo_de_sangre/:id', TipoDeSangreontroller.updateTipoDeSangre);
-router.delete('/tipo_de_sangre/:id', TipoDeSangreontroller.deleteTipoDeSangre);
+router.post('/tipo_de_sangre', TipoDeSangreController.createTipoDeSangre);
+router.get('/tipos_de_sangre', TipoDeSangreController.getAllTiposDeSangre);
+router.get('/tipo_de_sangre/:id', TipoDeSangreController.getTipoDeSangreById);
+router.put('/tipo_de_sangre/:id', TipoDeSangreController.updateTipoDeSangre);
+router.delete('/tipo_de_sangre/:id', TipoDeSangreController.deleteTipoDeSangre);
+
+//usuarios routes
+router.post('/usuario', UsuarioController.createUsuario);
+router.get('/usuarios', UsuarioController.getAllUsuarios);
+router.get('/usuario/:id', UsuarioController.getUsuarioById);
+router.put('/usuario/:id', UsuarioController.updateUsuario);
+router.delete('/usuario/:id', UsuarioController.deleteUsuario);
 
 module.exports = router;

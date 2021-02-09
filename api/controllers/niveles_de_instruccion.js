@@ -24,7 +24,7 @@ const getNivelDeInstruccionById = async (req, res) => {
       where: { nivel_de_instruccion_id: id },
     });
     if (NivelesDeInstruccion) {
-      return res.status(200).json({ nivelDeInstruccion });
+      return res.status(200).json({ data: nivelDeInstruccion });
     }
     return res.status(404).send('The specified ID does not exists');
   } catch (error) {

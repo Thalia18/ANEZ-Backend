@@ -59,18 +59,14 @@ const getAllPacientesAutocomplete = async (req, res) => {
       order: [['apellido', 'ASC']],
       attributes: ['nombre', 'apellido', 'cedula'],
     });
-    //array para autocomplet, concatenando nombre, apellido y cedula
+    //array para autocomplet, concatenando nombre, apellido y cedula  ➜
     pacientes.forEach((element) => {
-      let result = 'Nombres y Apellidos: '
-        .concat(element.nombre)
+      let result = element.cedula
         .trim()
+        .concat(' ➜ ')
+        .concat(element.nombre.trim())
         .concat(' ')
-        .concat(
-          element.apellido
-            .trim()
-            .concat(' Cédula: ')
-            .concat(element.cedula.trim())
-        );
+        .concat(element.apellido.trim());
       list.push(result);
     });
 

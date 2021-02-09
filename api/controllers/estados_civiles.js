@@ -11,7 +11,7 @@ const createEstadoCivil = async (req, res) => {
 const getAllEstadosCiviles = async (req, res) => {
   try {
     const estadosCiviles = await models.estados_civiles.findAll();
-    return res.status(200).json({ data: estadosCiviles });
+    return res.status(200).json({ estadosCiviles });
   } catch (error) {
     return res.status(500).send(error.message);
   }

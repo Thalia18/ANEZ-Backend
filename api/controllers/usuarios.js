@@ -33,7 +33,7 @@ const getUsuarioById = async (req, res) => {
       ],
     });
     if (usuario) {
-      return res.status(200).json({ usuario });
+      return res.status(200).json({ data: usuario });
     }
     return res.status(404).send('The specified ID does not exists');
   } catch (error) {

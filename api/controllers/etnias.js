@@ -11,7 +11,7 @@ const createEtnia = async (req, res) => {
 const getAllEtnias = async (req, res) => {
   try {
     const etnias = await models.etnias.findAll();
-    return res.status(200).json({ etnias });
+    return res.status(200).json({ data: etnias });
   } catch (error) {
     return res.status(500).send(error.message);
   }

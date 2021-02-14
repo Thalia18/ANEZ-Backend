@@ -11,7 +11,7 @@ const createNivelDeInstruccion = async (req, res) => {
 const getAllNivelesDeInstruccion = async (req, res) => {
   try {
     const nivelesDeInstruccion = await models.niveles_de_instruccion.findAll();
-    return res.status(200).json({ nivelesDeInstruccion });
+    return res.status(200).json({ data: nivelesDeInstruccion });
   } catch (error) {
     return res.status(500).send(error.message);
   }

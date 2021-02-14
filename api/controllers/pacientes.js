@@ -6,6 +6,7 @@ const createPaciente = async (req, res) => {
     await models.pacientes.create(req.body);
     return res.status(200).send('Created');
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -40,7 +41,7 @@ const getPacienteById = async (req, res) => {
       ],
     });
     if (pacient) {
-      return res.status(200).json({ pacient });
+      return res.status(200).json({ data: pacient });
     }
     return res.status(404).send('The specified ID does not exists');
   } catch (error) {

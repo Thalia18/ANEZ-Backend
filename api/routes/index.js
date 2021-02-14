@@ -58,7 +58,7 @@ router.get(
   CustomController.getAllEvolucionesPorHistoria
 );
 router.get('/fotos_evolucion/:id', CustomController.getAllFotosPorEvolucion);
-router.get('/confirm_user', CustomController.confirmUser);
+router.get('/confirm_user/:usuario/:contrasena', CustomController.confirmUser);
 router.get('/autocomplete', CustomController.getAllPacientesAutocomplete);
 
 //especialidades routes

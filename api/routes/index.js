@@ -60,6 +60,8 @@ router.get(
 router.get('/fotos_evolucion/:id', CustomController.getAllFotosPorEvolucion);
 router.get('/confirm_user/:usuario/:contrasena', CustomController.confirmUser);
 router.get('/autocomplete', CustomController.getAllPacientesAutocomplete);
+router.get('/cedula_paciente/:cedula', CustomController.getPacientesPorCedula);
+router.get('/historia_paciente/:id', CustomController.getHistoriaporIdPaciente);
 
 //especialidades routes
 router.post('/especialidad', EspecialidadController.createEspecialidad);

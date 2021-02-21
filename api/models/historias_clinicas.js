@@ -30,34 +30,32 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       gesta: {
-        type: DataTypes.CHAR(15),
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       parto: {
-        type: DataTypes.CHAR(15),
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       cesarea: {
-        type: DataTypes.CHAR(15),
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       aborto: {
-        type: DataTypes.CHAR(15),
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       metodo_anticonceptivo: {
-        type: DataTypes.CHAR(30),
+        type: DataTypes.TEXT,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: true,
-        field: 'created_at',
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: true,
-        field: 'updated_at',
       },
     },
     {

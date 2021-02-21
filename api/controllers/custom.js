@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt');
 const models = require('../models');
 const pagination = require('../utils/pagination');
+const { QueryTypes } = require('sequelize');
+const { sequelize } = require('../models');
+// const { QueryTypes } = require('sequelize');
 
 const getAllEvolucionesPorHistoria = async (req, res) => {
   try {
@@ -56,6 +59,7 @@ const confirmUser = async (req, res) => {
       if (match) {
         return res.status(200).json({
           data: {
+            isLoggedIn: true,
             usuario: usuario.usuario,
             rol: usuario.rol.rol,
             nombre: usuario.medico.nombre,
@@ -72,25 +76,40 @@ const confirmUser = async (req, res) => {
   }
 };
 const getAllPacientesAutocomplete = async (req, res) => {
-  let list = [];
+  // let list = [];
   try {
     const pacientes = await models.pacientes.findAll({
       order: [['apellido', 'ASC']],
       attributes: ['nombre', 'apellido', 'cedula'],
     });
-    //array para autocomplet, concatenando nombre, apellido y cedula  ➜
-    pacientes.forEach((element) => {
-      let result = element.cedula
-        .trim()
-        .concat(' ➜ ')
-        .concat(element.nombre.trim())
-        .concat(' ')
-        .concat(element.apellido.trim());
-      list.push(result);
-    });
-
     return res.status(200).json({
-      data: list,
+      data: pacientes,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+const getPacientesPorCedula = async (req, res) => {
+  try {
+    const { cedula } = req.params;
+    const paciente = await models.pacientes.findOne({
+      where: { cedula: cedula },
+    });
+    return res.status(200).json({
+      data: paciente,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+const getHistoriaporIdPaciente = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const historiaClinica = await models.historias_clinicas.findOne({
+      where: { paciente_id: id },
+    });
+    return res.status(200).json({
+      data: historiaClinica,
     });
   } catch (error) {
     return res.status(500).send(error.message);
@@ -101,4 +120,6 @@ module.exports = {
   getAllFotosPorEvolucion,
   confirmUser,
   getAllPacientesAutocomplete,
+  getPacientesPorCedula,
+  getHistoriaporIdPaciente,
 };

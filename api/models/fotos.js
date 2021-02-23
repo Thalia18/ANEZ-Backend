@@ -18,7 +18,7 @@ module.exports = function (sequelize, DataTypes) {
         },
       },
       foto_url: {
-        type: DataTypes.CHAR(150),
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       createdAt: {

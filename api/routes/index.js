@@ -63,6 +63,15 @@ router.get('/autocomplete', CustomController.getAllPacientesAutocomplete);
 router.get('/cedula_paciente/:cedula', CustomController.getPacientesPorCedula);
 router.get('/historia_paciente/:id', CustomController.getHistoriaporIdPaciente);
 
+router.get(
+  '/evoluciones_autocomplete/:id',
+  CustomController.getEvolucionesAutocomplete
+);
+router.get(
+  '/evoluciones_fecha/:id/:fecha1/:fecha2',
+  CustomController.evolucionesPorFecha
+);
+
 //especialidades routes
 router.post('/especialidad', EspecialidadController.createEspecialidad);
 router.get('/especialidades', EspecialidadController.getAllEspecialidades);

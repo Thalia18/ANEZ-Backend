@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
 const models = require('../models');
 const pagination = require('../utils/pagination');
-const { QueryTypes } = require('sequelize');
-const { sequelize } = require('../models');
+const sequelize = require('sequelize');
+const Op = sequelize.Sequelize.Op;
 // const { QueryTypes } = require('sequelize');
 
 const getAllEvolucionesPorHistoria = async (req, res) => {
@@ -10,7 +10,7 @@ const getAllEvolucionesPorHistoria = async (req, res) => {
     const { id } = req.params;
     const evoluciones = await models.evoluciones.findAll({
       where: { historia_clinica_id: id },
-      order: [['fecha', 'ASC']],
+      order: [['fecha', 'DESC']],
     });
     let data = pagination(req.query.page, evoluciones);
     return res.status(200).json({
@@ -76,7 +76,6 @@ const confirmUser = async (req, res) => {
   }
 };
 const getAllPacientesAutocomplete = async (req, res) => {
-  // let list = [];
   try {
     const pacientes = await models.pacientes.findAll({
       order: [['apellido', 'ASC']],
@@ -115,6 +114,47 @@ const getHistoriaporIdPaciente = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+const getEvolucionesAutocomplete = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const evoluciones = await models.evoluciones.findAll({
+      where: { historia_clinica_id: id },
+      attributes: ['evolucion_id', 'fecha', 'motivo_consulta', 'diagnostico'],
+    });
+    return res.status(200).json({
+      data: evoluciones,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+const evolucionesPorFecha = async (req, res) => {
+  try {
+    const { id, fecha1, fecha2 } = req.params;
+    let inicio;
+    let final;
+    if (fecha1 < fecha2) {
+      inicio = fecha1;
+      final = fecha2;
+    } else {
+      inicio = fecha2;
+      final = fecha1;
+    }
+    const evoluciones = await models.evoluciones.findAll({
+      where: {
+        historia_clinica_id: id,
+        fecha: { [Op.between]: [inicio, final] },
+      },
+    });
+    let data = pagination(req.query.page, evoluciones);
+    return res.status(200).json({
+      data: data,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
 module.exports = {
   getAllEvolucionesPorHistoria,
   getAllFotosPorEvolucion,
@@ -122,4 +162,6 @@ module.exports = {
   getAllPacientesAutocomplete,
   getPacientesPorCedula,
   getHistoriaporIdPaciente,
+  getEvolucionesAutocomplete,
+  evolucionesPorFecha,
 };

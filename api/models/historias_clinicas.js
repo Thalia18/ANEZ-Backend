@@ -49,13 +49,15 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      created_at: {
+      createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
+        field: 'created_at',
       },
-      updated_at: {
+      updatedAt: {
         type: DataTypes.DATE,
         allowNull: true,
+        field: 'updated_at',
       },
     },
     {

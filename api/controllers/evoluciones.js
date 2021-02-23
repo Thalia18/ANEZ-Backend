@@ -3,9 +3,14 @@ const pagination = require('../utils/pagination');
 
 const createEvolucion = async (req, res) => {
   try {
-    await models.evoluciones.create(req.body);
-    return res.status(201).send('Created');
+    const evolucion = await models.evoluciones.create(req.body);
+    return res.status(200).json({
+      data: {
+        evolucion_id: evolucion.evolucion_id,
+      },
+    });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -27,12 +32,6 @@ const getEvolucionById = async (req, res) => {
     const { id } = req.params;
     const evolucion = await models.evoluciones.findOne({
       where: { evolucion_id: id },
-      include: [
-        {
-          model: models.historias_clinicas,
-          as: 'historiaclinica',
-        },
-      ],
     });
     if (evolucion) {
       return res.status(200).json({ data: evolucion });

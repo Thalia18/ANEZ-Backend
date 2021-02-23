@@ -3,8 +3,24 @@ const pagination = require('../utils/pagination');
 
 const createPaciente = async (req, res) => {
   try {
-    await models.pacientes.create(req.body);
-    return res.status(200).send('Created');
+    const paciente = await models.pacientes.findOne({
+      where: { cedula: req.body.cedula },
+    });
+    console.log(paciente, 'paciente por cedula');
+    if (paciente !== null) {
+      return res.status(200).json({
+        data: {
+          exist: true,
+        },
+      });
+    } else {
+      await models.pacientes.create(req.body);
+      return res.status(200).json({
+        data: {
+          exist: false,
+        },
+      });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });

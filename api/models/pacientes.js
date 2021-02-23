@@ -42,11 +42,11 @@ module.exports = function (sequelize, DataTypes) {
         },
       },
       nombre: {
-        type: DataTypes.CHAR(60),
+        type: DataTypes.CHAR(100),
         allowNull: false,
       },
       apellido: {
-        type: DataTypes.CHAR(60),
+        type: DataTypes.CHAR(100),
         allowNull: false,
       },
       cedula: {
@@ -71,7 +71,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       contacto_emergencia_nombre: {
-        type: DataTypes.CHAR(100),
+        type: DataTypes.CHAR(150),
         allowNull: true,
       },
       contacto_emergencia_telefono: {

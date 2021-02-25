@@ -28,10 +28,25 @@ const getAllFotosPorEvolucion = async (req, res) => {
       where: { evolucion_id: id },
       order: [['created_at', 'ASC']],
     });
-    let data = pagination(req.query.page, fotos);
+
     return res.status(200).json({
-      info: data.paginate,
-      data: data.result,
+      data: fotos,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+const getAllFotosPorEvolucionP = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const fotos = await models.fotos.findAll({
+      where: { evolucion_id: id },
+      order: [['created_at', 'ASC']],
+      attributes: ['foto_url'],
+    });
+
+    return res.status(200).json({
+      data: fotos,
     });
   } catch (error) {
     return res.status(500).send(error.message);
@@ -114,7 +129,27 @@ const getHistoriaporIdPaciente = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
+const getPacienteporIdHistoria = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const historiaClinica = await models.historias_clinicas.findOne({
+      where: { historia_clinica_id: id },
+      attributes: ['historia_clinica_id'],
+      include: [
+        {
+          model: models.pacientes,
+          as: 'pacientes',
+        },
+      ],
+    });
+    if (historiaClinica) {
+      return res.status(200).json({ data: historiaClinica });
+    }
+    return res.status(404).send('The specified ID does not exists');
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
 const getEvolucionesAutocomplete = async (req, res) => {
   try {
     const { id } = req.params;
@@ -164,4 +199,6 @@ module.exports = {
   getHistoriaporIdPaciente,
   getEvolucionesAutocomplete,
   evolucionesPorFecha,
+  getPacienteporIdHistoria,
+  getAllFotosPorEvolucionP,
 };

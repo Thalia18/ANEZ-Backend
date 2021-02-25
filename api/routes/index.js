@@ -62,7 +62,9 @@ router.get('/confirm_user/:usuario/:contrasena', CustomController.confirmUser);
 router.get('/autocomplete', CustomController.getAllPacientesAutocomplete);
 router.get('/cedula_paciente/:cedula', CustomController.getPacientesPorCedula);
 router.get('/historia_paciente/:id', CustomController.getHistoriaporIdPaciente);
+router.get('/fotos_evolucion_p/:id', CustomController.getAllFotosPorEvolucionP);
 
+router.get('/paciente_historia/:id', CustomController.getPacienteporIdHistoria);
 router.get(
   '/evoluciones_autocomplete/:id',
   CustomController.getEvolucionesAutocomplete

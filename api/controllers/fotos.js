@@ -6,6 +6,7 @@ const createFoto = async (req, res) => {
     await models.fotos.create(req.body);
     return res.status(201).send('Created');
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };

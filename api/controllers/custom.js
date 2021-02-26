@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const models = require('../models');
 const pagination = require('../utils/pagination');
+const paginationEvolucion = require('../utils/pagination/paginateEvoluciones');
+
 const sequelize = require('sequelize');
 const Op = sequelize.Sequelize.Op;
 // const { QueryTypes } = require('sequelize');
@@ -12,7 +14,7 @@ const getAllEvolucionesPorHistoria = async (req, res) => {
       where: { historia_clinica_id: id },
       order: [['fecha', 'DESC']],
     });
-    let data = pagination(req.query.page, evoluciones);
+    let data = paginationEvolucion(req.query.page, evoluciones);
     return res.status(200).json({
       info: data.paginate,
       data: data.result,
@@ -182,9 +184,10 @@ const evolucionesPorFecha = async (req, res) => {
         fecha: { [Op.between]: [inicio, final] },
       },
     });
-    let data = pagination(req.query.page, evoluciones);
+    let data = paginationEvolucion(req.query.page, evoluciones);
     return res.status(200).json({
-      data: data,
+      info: data.paginate,
+      data: data.result,
     });
   } catch (error) {
     return res.status(500).send(error.message);

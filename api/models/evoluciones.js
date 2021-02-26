@@ -37,23 +37,25 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      tratamiento: {
+      medicacion: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
       proximo_control: {
         type: DataTypes.DATEONLY,
         allowNull: true,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: true,
-        field: 'created_at',
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: true,
-        field: 'updated_at',
+      },
+      indicacion: {
+        type: DataTypes.TEXT,
+        allowNull: true,
       },
     },
     {

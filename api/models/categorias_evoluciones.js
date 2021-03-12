@@ -1,15 +1,15 @@
 const Sequelize = require('sequelize');
 module.exports = function (sequelize, DataTypes) {
-  const SubcategoriasEvoluciones = sequelize.define(
-    'subcategorias_evoluciones',
+  const CategoriasEvoluciones = sequelize.define(
+    'categorias_evoluciones',
     {
-      subcategoria_id: {
+      categoria_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         references: {
-          model: 'subcategorias',
-          key: 'subcategoria_id',
+          model: 'categorias',
+          key: 'categoria_id',
         },
       },
       evolucion_id: {
@@ -34,41 +34,41 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       sequelize,
-      tableName: 'subcategorias_evoluciones',
+      tableName: 'categorias_evoluciones',
       schema: 'public',
       underscored: true,
       timestamps: true,
       indexes: [
         {
-          name: 'pk_subcategorias_evoluciones',
-          unique: true,
-          fields: [{ name: 'subcategoria_id' }, { name: 'evolucion_id' }],
-        },
-        {
-          name: 'subcategoriasevoluciones2_fk',
+          name: 'categorias_evoluciones2_fk',
           fields: [{ name: 'evolucion_id' }],
         },
         {
-          name: 'subcategoriasevoluciones_fk',
-          fields: [{ name: 'subcategoria_id' }],
+          name: 'categorias_evoluciones_fk',
+          fields: [{ name: 'categoria_id' }],
         },
         {
-          name: 'subcategoriasevoluciones_pk',
+          name: 'categorias_evoluciones_pk',
           unique: true,
-          fields: [{ name: 'subcategoria_id' }, { name: 'evolucion_id' }],
+          fields: [{ name: 'categoria_id' }, { name: 'evolucion_id' }],
+        },
+        {
+          name: 'pk_categorias_evoluciones',
+          unique: true,
+          fields: [{ name: 'categoria_id' }, { name: 'evolucion_id' }],
         },
       ],
     }
   );
-  SubcategoriasEvoluciones.associate = function (models) {
-    SubcategoriasEvoluciones.belongsTo(models.evoluciones, {
+  CategoriasEvoluciones.associate = function (models) {
+    CategoriasEvoluciones.belongsTo(models.evoluciones, {
       foreignKey: 'evolucion_id',
       as: 'evoluciones',
     });
-    SubcategoriasEvoluciones.belongsTo(models.subcategorias, {
-      foreignKey: 'subcategoria_id',
-      as: 'subcategorias',
+    CategoriasEvoluciones.belongsTo(models.categorias, {
+      foreignKey: 'categoria_id',
+      as: 'categorias',
     });
   };
-  return SubcategoriasEvoluciones;
+  return CategoriasEvoluciones;
 };

@@ -12,10 +12,9 @@ const createSubcategoria = async (req, res) => {
 const getAllSubcategorias = async (req, res) => {
   try {
     const subcategorias = await models.subcategorias.findAll();
-    let data = pagination(req.query.page, subcategorias);
+
     return res.status(200).json({
-      info: data.paginate,
-      data: data.result,
+      data: subcategorias,
     });
   } catch (error) {
     return res.status(500).send(error.message);

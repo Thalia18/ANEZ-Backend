@@ -65,8 +65,8 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'categoria_id',
       as: 'categoria',
     });
-    Subcategorias.belongsTo(models.subcategorias_evoluciones, {
-      foreignKey: 'subcategoria_id',
+    Subcategorias.belongsTo(models.categorias_evoluciones, {
+      foreignKey: 'categoria_id',
       as: 'subcategorias',
     });
   };

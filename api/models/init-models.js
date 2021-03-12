@@ -1,6 +1,7 @@
 var DataTypes = require('sequelize').DataTypes;
 var _capitulos = require('./capitulos');
 var _categorias = require('./categorias');
+var _categorias_evoluciones = require('./categorias_evoluciones');
 var _citas = require('./citas');
 var _consultorios = require('./consultorios');
 var _especialidades = require('./especialidades');
@@ -15,13 +16,13 @@ var _niveles_de_instruccion = require('./niveles_de_instruccion');
 var _pacientes = require('./pacientes');
 var _roles = require('./roles');
 var _subcategorias = require('./subcategorias');
-var _subcategorias_evoluciones = require('./subcategorias_evoluciones');
 var _tipos_de_sangre = require('./tipos_de_sangre');
 var _usuarios = require('./usuarios');
 
 function initModels(sequelize) {
   var capitulos = _capitulos(sequelize, DataTypes);
   var categorias = _categorias(sequelize, DataTypes);
+  var categorias_evoluciones = _categorias_evoluciones(sequelize, DataTypes);
   var citas = _citas(sequelize, DataTypes);
   var consultorios = _consultorios(sequelize, DataTypes);
   var especialidades = _especialidades(sequelize, DataTypes);
@@ -36,13 +37,19 @@ function initModels(sequelize) {
   var pacientes = _pacientes(sequelize, DataTypes);
   var roles = _roles(sequelize, DataTypes);
   var subcategorias = _subcategorias(sequelize, DataTypes);
-  var subcategorias_evoluciones = _subcategorias_evoluciones(
-    sequelize,
-    DataTypes
-  );
   var tipos_de_sangre = _tipos_de_sangre(sequelize, DataTypes);
   var usuarios = _usuarios(sequelize, DataTypes);
 
+  evoluciones.belongsToMany(categorias, {
+    through: categorias_evoluciones,
+    foreignKey: 'evolucion_id',
+    otherKey: 'categoria_id',
+  });
+  categorias.belongsToMany(evoluciones, {
+    through: categorias_evoluciones,
+    foreignKey: 'categoria_id',
+    otherKey: 'evolucion_id',
+  });
   medicos.belongsToMany(especialidades, {
     through: especialidades_medicos,
     foreignKey: 'medico_id',
@@ -53,18 +60,12 @@ function initModels(sequelize) {
     foreignKey: 'especialidad_id',
     otherKey: 'medico_id',
   });
-  subcategorias.belongsToMany(evoluciones, {
-    through: subcategorias_evoluciones,
-    foreignKey: 'subcategoria_id',
-    otherKey: 'evolucion_id',
-  });
-  evoluciones.belongsToMany(subcategorias, {
-    through: subcategorias_evoluciones,
-    foreignKey: 'evolucion_id',
-    otherKey: 'subcategoria_id',
-  });
   categorias.belongsTo(capitulos, { foreignKey: 'capitulo_id' });
   capitulos.hasMany(categorias, { foreignKey: 'capitulo_id' });
+  categorias_evoluciones.belongsTo(categorias, { foreignKey: 'categoria_id' });
+  categorias.hasMany(categorias_evoluciones, { foreignKey: 'categoria_id' });
+  categorias_evoluciones.belongsTo(evoluciones, { foreignKey: 'evolucion_id' });
+  evoluciones.hasMany(categorias_evoluciones, { foreignKey: 'evolucion_id' });
   citas.belongsTo(medicos, { foreignKey: 'medico_id' });
   medicos.hasMany(citas, { foreignKey: 'medico_id' });
   citas.belongsTo(pacientes, { foreignKey: 'paciente_id' });
@@ -103,18 +104,6 @@ function initModels(sequelize) {
   tipos_de_sangre.hasMany(pacientes, { foreignKey: 'tipo_de_sangre_id' });
   subcategorias.belongsTo(categorias, { foreignKey: 'categoria_id' });
   categorias.hasMany(subcategorias, { foreignKey: 'categoria_id' });
-  subcategorias_evoluciones.belongsTo(evoluciones, {
-    foreignKey: 'evolucion_id',
-  });
-  evoluciones.hasMany(subcategorias_evoluciones, {
-    foreignKey: 'evolucion_id',
-  });
-  subcategorias_evoluciones.belongsTo(subcategorias, {
-    foreignKey: 'subcategoria_id',
-  });
-  subcategorias.hasMany(subcategorias_evoluciones, {
-    foreignKey: 'subcategoria_id',
-  });
   usuarios.belongsTo(medicos, { foreignKey: 'medico_id' });
   medicos.hasMany(usuarios, { foreignKey: 'medico_id' });
   usuarios.belongsTo(roles, { foreignKey: 'rol_id' });
@@ -123,6 +112,7 @@ function initModels(sequelize) {
   return {
     capitulos,
     categorias,
+    categorias_evoluciones,
     citas,
     consultorios,
     especialidades,
@@ -137,7 +127,6 @@ function initModels(sequelize) {
     pacientes,
     roles,
     subcategorias,
-    subcategorias_evoluciones,
     tipos_de_sangre,
     usuarios,
   };

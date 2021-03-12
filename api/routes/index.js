@@ -15,7 +15,7 @@ const MedicoController = require('../controllers//medicos');
 const NivelDeInstruccionController = require('../controllers/niveles_de_instruccion');
 const PacienteController = require('../controllers/pacientes');
 const RolController = require('../controllers/roles');
-const SubcategoriaEvolucionController = require('../controllers/subcategorias_evoluciones');
+const CategoriaEvolucionController = require('../controllers/categorias_evoluciones');
 const SubcategoriaController = require('../controllers/subcategorias');
 const TipoDeSangreController = require('../controllers/tipos_de_sangre');
 const UsuarioController = require('../controllers/usuarios');
@@ -37,6 +37,28 @@ router.get('/categorias', Categoriaontroller.getAllCategorias);
 router.get('/categoria/:id', Categoriaontroller.getCategoriaById);
 router.put('/categoria/:id', Categoriaontroller.updateCategoria);
 router.delete('/categoria/:id', Categoriaontroller.deleteCategoria);
+
+//categorias_evoluciones routes
+router.post(
+  '/categoria_evolucion',
+  CategoriaEvolucionController.createCategoriaEvolucion
+);
+router.get(
+  '/categorias_evoluciones',
+  CategoriaEvolucionController.getCategoriasEvoluciones
+);
+router.get(
+  '/categoria_evolucion/:id',
+  CategoriaEvolucionController.getCategoriaEvolucionById
+);
+router.put(
+  '/categoria_evolucion/:id',
+  CategoriaEvolucionController.updateCategoriaEvolucion
+);
+router.delete(
+  '/categoria_evolucion/:id',
+  CategoriaEvolucionController.deleteCategoriaEvolucion
+);
 
 //citas routes
 router.post('/cita', CitaController.createCita);
@@ -195,28 +217,6 @@ router.get('/roles', RolController.getAllRoles);
 router.get('/rol/:id', RolController.getRolById);
 router.put('/rol/:id', RolController.updateRol);
 router.delete('/rol/:id', RolController.deleteRol);
-
-//subcategorias_evoluciones routes
-router.post(
-  '/subcategoria_evolucion',
-  SubcategoriaEvolucionController.createSubcategoriaEvolucion
-);
-router.get(
-  '/subcategorias_evoluciones',
-  SubcategoriaEvolucionController.getSubcategoriasEvoluciones
-);
-router.get(
-  '/subcategoria_evolucion/:id',
-  SubcategoriaEvolucionController.getSubcategoriaEvolucionById
-);
-router.put(
-  '/subcategoria_evolucion/:id',
-  SubcategoriaEvolucionController.updateSubcategoriaEvolucion
-);
-router.delete(
-  '/subcategoria_evolucion/:id',
-  SubcategoriaEvolucionController.deleteSubcategoriaEvolucion
-);
 
 //subcategorias routes
 router.post('/subcategoria', SubcategoriaController.createSubcategoria);

@@ -90,7 +90,7 @@ module.exports = function (sequelize, DataTypes) {
     Evoluciones.hasMany(models.fotos, {
       foreignKey: 'evolucion_id',
     });
-    Evoluciones.belongsTo(models.subcategorias_evoluciones, {
+    Evoluciones.belongsTo(models.categorias_evoluciones, {
       foreignKey: 'evolucion_id',
       as: 'evoluciones',
     });

@@ -82,6 +82,8 @@ const confirmUser = async (req, res) => {
             nombre: usuario.medico.nombre,
             apellido: usuario.medico.apellido,
             cedula: usuario.medico.cedula,
+            consultorio_id: usuario.medico.consultorio_id,
+            medico_id: usuario.medico.medico_id,
           },
         });
       }

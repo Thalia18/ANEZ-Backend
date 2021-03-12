@@ -25,8 +25,15 @@ const getAllEspecialidadesMedicos = async (req, res) => {
 const getEspecialidadMedicoById = async (req, res) => {
   try {
     const { id } = req.params;
-    const especialidadMedico = await models.especialidades_medicos.findAll({
+    const especialidadMedico = await models.especialidades_medicos.findOne({
       where: { medico_id: id },
+      include: [
+        {
+          model: models.especialidades,
+          as: 'especialidades',
+          attributes: ['especialidad'],
+        },
+      ],
     });
     if (especialidadMedico) {
       return res.status(200).json({ data: especialidadMedico });

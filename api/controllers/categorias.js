@@ -12,10 +12,8 @@ const createCategoria = async (req, res) => {
 const getAllCategorias = async (req, res) => {
   try {
     const categorias = await models.categorias.findAll();
-    let data = pagination(req.query.page, categorias);
     return res.status(200).json({
-      info: data.paginate,
-      data: data.result,
+      data: categorias,
     });
   } catch (error) {
     return res.status(500).send(error.message);

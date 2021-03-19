@@ -27,10 +27,7 @@ const getUsuarioById = async (req, res) => {
     const { id } = req.params;
     const usuario = await models.usuarios.findOne({
       where: { usuario_id: id },
-      include: [
-        { model: models.medicos, as: 'medico' },
-        { model: models.roles, as: 'rol' },
-      ],
+      include: [{ model: models.roles, as: 'rol' }],
     });
     if (usuario) {
       return res.status(200).json({ data: usuario });

@@ -90,6 +90,8 @@ function initModels(sequelize) {
   pacientes.hasMany(historias_clinicas, { foreignKey: 'paciente_id' });
   medicos.belongsTo(consultorios, { foreignKey: 'consultorio_id' });
   consultorios.hasMany(medicos, { foreignKey: 'consultorio_id' });
+  medicos.belongsTo(usuarios, { foreignKey: 'usuario_id' });
+  usuarios.hasMany(medicos, { foreignKey: 'usuario_id' });
   pacientes.belongsTo(estados_civiles, { foreignKey: 'estado_civil_id' });
   estados_civiles.hasMany(pacientes, { foreignKey: 'estado_civil_id' });
   pacientes.belongsTo(etnias, { foreignKey: 'etnia_id' });
@@ -104,8 +106,6 @@ function initModels(sequelize) {
   tipos_de_sangre.hasMany(pacientes, { foreignKey: 'tipo_de_sangre_id' });
   subcategorias.belongsTo(categorias, { foreignKey: 'categoria_id' });
   categorias.hasMany(subcategorias, { foreignKey: 'categoria_id' });
-  usuarios.belongsTo(medicos, { foreignKey: 'medico_id' });
-  medicos.hasMany(usuarios, { foreignKey: 'medico_id' });
   usuarios.belongsTo(roles, { foreignKey: 'rol_id' });
   roles.hasMany(usuarios, { foreignKey: 'rol_id' });
 

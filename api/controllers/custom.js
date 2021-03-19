@@ -65,25 +65,24 @@ const confirmUser = async (req, res) => {
           model: models.roles,
           as: 'rol',
         },
-        {
-          model: models.medicos,
-          as: 'medico',
-        },
       ],
     });
     if (usuario) {
       const match = await bcrypt.compareSync(password, usuario.contrasena);
       if (match) {
+        const medico = await models.medicos.findOne({
+          where: { usuario_id: usuario.usuario_id },
+        });
         return res.status(200).json({
           data: {
             isLoggedIn: true,
             usuario: usuario.usuario,
             rol: usuario.rol.rol,
-            nombre: usuario.medico.nombre,
-            apellido: usuario.medico.apellido,
-            cedula: usuario.medico.cedula,
-            consultorio_id: usuario.medico.consultorio_id,
-            medico_id: usuario.medico.medico_id,
+            nombre: medico.nombre,
+            apellido: medico.apellido,
+            cedula: medico.cedula,
+            consultorio_id: medico.consultorio_id,
+            medico_id: medico.medico_id,
           },
         });
       }

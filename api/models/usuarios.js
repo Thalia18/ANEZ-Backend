@@ -11,14 +11,6 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true,
       },
-      medico_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'medicos',
-          key: 'medico_id',
-        },
-      },
       rol_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -65,15 +57,6 @@ module.exports = function (sequelize, DataTypes) {
           fields: [{ name: 'usuario_id' }],
         },
         {
-          name: 'unique_usuario',
-          unique: true,
-          fields: [{ name: 'usuario' }],
-        },
-        {
-          name: 'usuarios_medicos_fk',
-          fields: [{ name: 'medico_id' }],
-        },
-        {
           name: 'usuarios_pk',
           unique: true,
           fields: [{ name: 'usuario_id' }],
@@ -86,9 +69,8 @@ module.exports = function (sequelize, DataTypes) {
     }
   );
   Usuarios.associate = function (models) {
-    Usuarios.belongsTo(models.medicos, {
+    Usuarios.hasMany(models.medicos, {
       foreignKey: 'medico_id',
-      as: 'medico',
     });
     Usuarios.belongsTo(models.roles, {
       foreignKey: 'rol_id',

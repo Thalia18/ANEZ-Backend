@@ -27,10 +27,13 @@ const getMedicoById = async (req, res) => {
     const { id } = req.params;
     const medico = await models.medicos.findOne({
       where: { medico_id: id },
-      include: {
-        model: models.consultorios,
-        as: 'consultorios',
-      },
+      include: [
+        {
+          model: models.consultorios,
+          as: 'consultorios',
+        },
+        { model: models.usuarios, as: 'usuario' },
+      ],
     });
     if (medico) {
       return res.status(200).json({ data: medico });

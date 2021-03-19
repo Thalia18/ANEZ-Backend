@@ -9,6 +9,14 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true,
       },
+      usuario_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'usuarios',
+          key: 'usuario_id',
+        },
+      },
       consultorio_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -48,7 +56,7 @@ module.exports = function (sequelize, DataTypes) {
       timestamps: true,
       indexes: [
         {
-          name: 'consultoriosmedicos_fk',
+          name: 'consultorios_medicos_fk',
           fields: [{ name: 'consultorio_id' }],
         },
         {
@@ -60,6 +68,10 @@ module.exports = function (sequelize, DataTypes) {
           name: 'pk_medicos',
           unique: true,
           fields: [{ name: 'medico_id' }],
+        },
+        {
+          name: 'usuarios_medicos_fk',
+          fields: [{ name: 'usuario_id' }],
         },
       ],
     }
@@ -76,8 +88,9 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'medico_id',
       as: 'medicos',
     });
-    Medicos.hasMany(models.usuarios, {
+    Medicos.belongsTo(models.usuarios, {
       foreignKey: 'medico_id',
+      as: 'usuario',
     });
   };
   return Medicos;

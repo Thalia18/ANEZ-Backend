@@ -6,7 +6,7 @@ const paginationEvolucion = require('../utils/pagination/paginateEvoluciones');
 const sequelize = require('sequelize');
 const Op = sequelize.Sequelize.Op;
 // const { QueryTypes } = require('sequelize');
-
+// const { sequelize } = require('../models');
 const getAllEvolucionesPorHistoria = async (req, res) => {
   try {
     const { id } = req.params;
@@ -167,28 +167,42 @@ const getEvolucionesAutocomplete = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-const evolucionesPorFecha = async (req, res) => {
+const getEvolucionesPorFecha = async (req, res) => {
   try {
     const { id, fecha1, fecha2 } = req.params;
-    let inicio;
-    let final;
-    if (fecha1 < fecha2) {
-      inicio = fecha1;
-      final = fecha2;
-    } else {
-      inicio = fecha2;
-      final = fecha1;
-    }
     const evoluciones = await models.evoluciones.findAll({
       where: {
         historia_clinica_id: id,
-        fecha: { [Op.between]: [inicio, final] },
+        fecha: { [Op.between]: [fecha1, fecha2] },
       },
     });
     let data = paginationEvolucion(req.query.page, evoluciones);
     return res.status(200).json({
       info: data.paginate,
       data: data.result,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+const getCitasPorFecha = async (req, res) => {
+  try {
+    const { fecha1, fecha2 } = req.params;
+    const citas = await models.citas.findAll({
+      where: {
+        fecha: { [Op.between]: [fecha1, fecha2] },
+      },
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido', 'cedula'],
+          as: 'pacientes',
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      data: citas,
     });
   } catch (error) {
     return res.status(500).send(error.message);
@@ -202,7 +216,8 @@ module.exports = {
   getPacientesPorCedula,
   getHistoriaporIdPaciente,
   getEvolucionesAutocomplete,
-  evolucionesPorFecha,
+  getEvolucionesPorFecha,
   getPacienteporIdHistoria,
   getAllFotosPorEvolucionP,
+  getCitasPorFecha,
 };

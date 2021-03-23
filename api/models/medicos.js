@@ -37,6 +37,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.CHAR(60),
         allowNull: false,
       },
+      email: {
+        type: DataTypes.CHAR(150),
+        allowNull: true,
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,

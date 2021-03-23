@@ -3,8 +3,19 @@ const pagination = require('../utils/pagination');
 
 const createCita = async (req, res) => {
   try {
-    await models.citas.create(req.body);
-    return res.status(201).send('Created');
+    const cita = await models.citas.findOne({
+      where: {
+        // paciente_id: req.body.paciente_id,
+        fecha: req.body.fecha,
+        hora: req.body.hora,
+      },
+    });
+    if (cita) {
+      return res.status(200).json({ data: { exist: true } });
+    } else {
+      await models.citas.create(req.body);
+      return res.status(201).send('Created');
+    }
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -22,17 +33,10 @@ const getAllCitas = async (req, res) => {
           attributes: ['nombre', 'apellido', 'cedula'],
           as: 'pacientes',
         },
-        {
-          model: models.medicos,
-          attributes: ['nombre', 'apellido', 'cedula'],
-          as: 'medicos',
-        },
       ],
     });
-    let data = pagination(req.query.page, citas);
     return res.status(200).json({
-      info: data.paginate,
-      data: data.result,
+      data: citas,
     });
   } catch (error) {
     return res.status(500).send(error.message);
@@ -49,7 +53,6 @@ const getCitaById = async (req, res) => {
           model: models.pacientes,
           as: 'pacientes',
         },
-        { model: models.medicos, as: 'medicos' },
       ],
     });
     if (cita) {

@@ -81,6 +81,11 @@ module.exports = function (sequelize, DataTypes) {
           unique: true,
           fields: [{ name: 'historia_clinica_id' }],
         },
+        {
+          name: 'unique_paciente',
+          unique: true,
+          fields: [{ name: 'paciente_id' }],
+        },
       ],
     }
   );

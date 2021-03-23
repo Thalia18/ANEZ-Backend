@@ -70,6 +70,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.CHAR(15),
         allowNull: false,
       },
+      email: {
+        type: DataTypes.CHAR(150),
+        allowNull: true,
+      },
       contacto_emergencia_nombre: {
         type: DataTypes.CHAR(150),
         allowNull: true,

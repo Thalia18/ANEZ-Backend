@@ -93,8 +93,9 @@ router.get(
 );
 router.get(
   '/evoluciones_fecha/:id/:fecha1/:fecha2',
-  CustomController.evolucionesPorFecha
+  CustomController.getEvolucionesPorFecha
 );
+router.get('/citas_fecha/:fecha1/:fecha2', CustomController.getCitasPorFecha);
 
 //especialidades routes
 router.post('/especialidad', EspecialidadController.createEspecialidad);

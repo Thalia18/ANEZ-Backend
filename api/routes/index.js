@@ -96,6 +96,11 @@ router.get(
   CustomController.getEvolucionesPorFecha
 );
 router.get('/citas_fecha/:fecha1/:fecha2', CustomController.getCitasPorFecha);
+router.get(
+  '/pacientes_buscar/:value',
+  CustomController.getAllPacientesCedulaApellido
+);
+router.get('/citas_fecha/:fecha', CustomController.getAllCitasFecha);
 
 //especialidades routes
 router.post('/especialidad', EspecialidadController.createEspecialidad);

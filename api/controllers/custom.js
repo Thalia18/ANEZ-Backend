@@ -99,13 +99,51 @@ const getAllPacientesAutocomplete = async (req, res) => {
       order: [['apellido', 'ASC']],
       attributes: ['nombre', 'apellido', 'cedula'],
     });
+    let data = pagination(req.query.page, pacientes);
     return res.status(200).json({
-      data: pacientes,
+      data: data,
     });
   } catch (error) {
     return res.status(500).send(error.message);
   }
 };
+
+const getAllPacientesCedulaApellido = async (req, res) => {
+  var { value } = req.params;
+  try {
+    const pacientes = await models.pacientes.findAll({
+      where: {
+        [Op.or]: [
+          {
+            apellido: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+          {
+            nombre: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+          {
+            cedula: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+        ],
+      },
+      order: [['apellido', 'ASC']],
+      attributes: ['paciente_id', 'nombre', 'apellido', 'cedula', 'telefono'],
+    });
+    let data = pagination(req.query.page, pacientes);
+    return res.status(200).json({
+      info: data.paginate,
+      data: data.result,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 const getPacientesPorCedula = async (req, res) => {
   try {
     const { cedula } = req.params;
@@ -208,6 +246,37 @@ const getCitasPorFecha = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+const getAllCitasFecha = async (req, res) => {
+  try {
+    const { fecha } = req.params;
+    var fechaF = fecha.split('-');
+    var year = fechaF[0];
+    var month = fechaF[1];
+    var day = fechaF[2];
+    var fecha1 = year + '-' + month + '-01';
+    var fecha2 = year + '-' + month + '-' + day;
+    console.log(fecha1, fecha2);
+    const citas = await models.citas.findAll({
+      where: { fecha: { [Op.between]: [fecha1, fecha2] } },
+      order: [
+        ['fecha', 'ASC'],
+        ['hora', 'ASC'],
+      ],
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido', 'cedula'],
+          as: 'pacientes',
+        },
+      ],
+    });
+    return res.status(200).json({
+      data: citas,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
 module.exports = {
   getAllEvolucionesPorHistoria,
   getAllFotosPorEvolucion,
@@ -220,4 +289,6 @@ module.exports = {
   getPacienteporIdHistoria,
   getAllFotosPorEvolucionP,
   getCitasPorFecha,
+  getAllPacientesCedulaApellido,
+  getAllCitasFecha,
 };

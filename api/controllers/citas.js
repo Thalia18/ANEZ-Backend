@@ -1,5 +1,7 @@
 const models = require('../models');
 const pagination = require('../utils/pagination');
+const sequelize = require('sequelize');
+const Op = sequelize.Sequelize.Op;
 
 const createCita = async (req, res) => {
   try {
@@ -9,9 +11,16 @@ const createCita = async (req, res) => {
         fecha: req.body.fecha,
         hora: req.body.hora,
       },
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido'],
+          as: 'pacientes',
+        },
+      ],
     });
     if (cita) {
-      return res.status(200).json({ data: { exist: true } });
+      return res.status(200).json({ data: cita });
     } else {
       await models.citas.create(req.body);
       return res.status(201).send('Created');
@@ -23,6 +32,7 @@ const createCita = async (req, res) => {
 const getAllCitas = async (req, res) => {
   try {
     const citas = await models.citas.findAll({
+      where: { fecha: { [Op.between]: [fecha1, fecha2] } },
       order: [
         ['fecha', 'ASC'],
         ['hora', 'ASC'],
@@ -66,19 +76,37 @@ const getCitaById = async (req, res) => {
 
 const updateCita = async (req, res) => {
   try {
-    const { id } = req.params;
-    const [updated] = await models.citas.update(req.body, {
-      where: { cita_id: id },
+    const cita = await models.citas.findOne({
+      where: {
+        // paciente_id: req.body.paciente_id,
+        fecha: req.body.fecha,
+        hora: req.body.hora,
+      },
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido'],
+          as: 'pacientes',
+        },
+      ],
     });
-    if (updated) {
-      await models.citas.findOne({
+    if (cita) {
+      return res.status(200).json({ data: cita });
+    } else {
+      const { id } = req.params;
+      const [updated] = await models.citas.update(req.body, {
         where: { cita_id: id },
       });
-      return res.status(200).send('Updated');
+      if (updated) {
+        await models.citas.findOne({
+          where: { cita_id: id },
+        });
+        return res.status(200).send('Updated');
+      }
+      throw new Error('Not found');
     }
-    throw new Error('Not found');
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).json({ error: error.message });
   }
 };
 

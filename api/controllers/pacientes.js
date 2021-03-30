@@ -68,7 +68,7 @@ const getPacienteById = async (req, res) => {
 const updatePaciente = async (req, res) => {
   try {
     const { id } = req.params;
-    const [updated] = await models.pacientes.update(req.body, {
+    const updated = await models.pacientes.update(req.body, {
       where: { paciente_id: id },
     });
     if (updated) {
@@ -79,7 +79,7 @@ const updatePaciente = async (req, res) => {
     }
     throw new Error('Not found');
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 };
 

@@ -5,8 +5,7 @@ const paginationEvolucion = require('../utils/pagination/paginateEvoluciones');
 
 const sequelize = require('sequelize');
 const Op = sequelize.Sequelize.Op;
-// const { QueryTypes } = require('sequelize');
-// const { sequelize } = require('../models');
+
 const getAllEvolucionesPorHistoria = async (req, res) => {
   try {
     const { id } = req.params;
@@ -23,37 +22,7 @@ const getAllEvolucionesPorHistoria = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-// const getAllFotosPorEvolucion = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const fotos = await models.fotos.findAll({
-//       where: { evolucion_id: id },
-//       order: [['created_at', 'ASC']],
-//     });
 
-//     return res.status(200).json({
-//       data: fotos,
-//     });
-//   } catch (error) {
-//     return res.status(500).send(error.message);
-//   }
-// };
-// const getAllFotosPorEvolucionP = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const fotos = await models.fotos.findAll({
-//       where: { evolucion_id: id },
-//       order: [['created_at', 'ASC']],
-//       attributes: ['foto_url'],
-//     });
-
-//     return res.status(200).json({
-//       data: fotos,
-//     });
-//   } catch (error) {
-//     return res.status(500).send(error.message);
-//   }
-// };
 const confirmUser = async (req, res) => {
   try {
     let user = req.params.usuario;

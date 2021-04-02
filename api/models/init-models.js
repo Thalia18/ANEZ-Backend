@@ -1,15 +1,12 @@
 var DataTypes = require('sequelize').DataTypes;
 var _capitulos = require('./capitulos');
 var _categorias = require('./categorias');
-var _categorias_evoluciones = require('./categorias_evoluciones');
 var _citas = require('./citas');
 var _consultorios = require('./consultorios');
 var _especialidades = require('./especialidades');
-var _especialidades_medicos = require('./especialidades_medicos');
 var _estados_civiles = require('./estados_civiles');
 var _etnias = require('./etnias');
 var _evoluciones = require('./evoluciones');
-var _fotos = require('./fotos');
 var _historias_clinicas = require('./historias_clinicas');
 var _medicos = require('./medicos');
 var _niveles_de_instruccion = require('./niveles_de_instruccion');
@@ -22,15 +19,12 @@ var _usuarios = require('./usuarios');
 function initModels(sequelize) {
   var capitulos = _capitulos(sequelize, DataTypes);
   var categorias = _categorias(sequelize, DataTypes);
-  var categorias_evoluciones = _categorias_evoluciones(sequelize, DataTypes);
   var citas = _citas(sequelize, DataTypes);
   var consultorios = _consultorios(sequelize, DataTypes);
   var especialidades = _especialidades(sequelize, DataTypes);
-  var especialidades_medicos = _especialidades_medicos(sequelize, DataTypes);
   var estados_civiles = _estados_civiles(sequelize, DataTypes);
   var etnias = _etnias(sequelize, DataTypes);
   var evoluciones = _evoluciones(sequelize, DataTypes);
-  var fotos = _fotos(sequelize, DataTypes);
   var historias_clinicas = _historias_clinicas(sequelize, DataTypes);
   var medicos = _medicos(sequelize, DataTypes);
   var niveles_de_instruccion = _niveles_de_instruccion(sequelize, DataTypes);
@@ -40,54 +34,20 @@ function initModels(sequelize) {
   var tipos_de_sangre = _tipos_de_sangre(sequelize, DataTypes);
   var usuarios = _usuarios(sequelize, DataTypes);
 
-  evoluciones.belongsToMany(categorias, {
-    through: categorias_evoluciones,
-    foreignKey: 'evolucion_id',
-    otherKey: 'categoria_id',
-  });
-  categorias.belongsToMany(evoluciones, {
-    through: categorias_evoluciones,
-    foreignKey: 'categoria_id',
-    otherKey: 'evolucion_id',
-  });
-  medicos.belongsToMany(especialidades, {
-    through: especialidades_medicos,
-    foreignKey: 'medico_id',
-    otherKey: 'especialidad_id',
-  });
-  especialidades.belongsToMany(medicos, {
-    through: especialidades_medicos,
-    foreignKey: 'especialidad_id',
-    otherKey: 'medico_id',
-  });
   categorias.belongsTo(capitulos, { foreignKey: 'capitulo_id' });
   capitulos.hasMany(categorias, { foreignKey: 'capitulo_id' });
-  categorias_evoluciones.belongsTo(categorias, { foreignKey: 'categoria_id' });
-  categorias.hasMany(categorias_evoluciones, { foreignKey: 'categoria_id' });
-  categorias_evoluciones.belongsTo(evoluciones, { foreignKey: 'evolucion_id' });
-  evoluciones.hasMany(categorias_evoluciones, { foreignKey: 'evolucion_id' });
   citas.belongsTo(medicos, { foreignKey: 'medico_id' });
   medicos.hasMany(citas, { foreignKey: 'medico_id' });
   citas.belongsTo(pacientes, { foreignKey: 'paciente_id' });
   pacientes.hasMany(citas, { foreignKey: 'paciente_id' });
-  especialidades_medicos.belongsTo(especialidades, {
-    foreignKey: 'especialidad_id',
-  });
-  especialidades.hasMany(especialidades_medicos, {
-    foreignKey: 'especialidad_id',
-  });
-  especialidades_medicos.belongsTo(medicos, { foreignKey: 'medico_id' });
-  medicos.hasMany(especialidades_medicos, { foreignKey: 'medico_id' });
   evoluciones.belongsTo(historias_clinicas, {
     foreignKey: 'historia_clinica_id',
   });
   historias_clinicas.hasMany(evoluciones, {
     foreignKey: 'historia_clinica_id',
   });
-  fotos.belongsTo(evoluciones, { foreignKey: 'evolucion_id' });
-  evoluciones.hasMany(fotos, { foreignKey: 'evolucion_id' });
   historias_clinicas.belongsTo(pacientes, { foreignKey: 'paciente_id' });
-  pacientes.hasMany(historias_clinicas, { foreignKey: 'paciente_id' });
+  pacientes.hasOne(historias_clinicas, { foreignKey: 'paciente_id' });
   medicos.belongsTo(consultorios, { foreignKey: 'consultorio_id' });
   consultorios.hasMany(medicos, { foreignKey: 'consultorio_id' });
   medicos.belongsTo(usuarios, { foreignKey: 'usuario_id' });
@@ -112,15 +72,12 @@ function initModels(sequelize) {
   return {
     capitulos,
     categorias,
-    categorias_evoluciones,
     citas,
     consultorios,
     especialidades,
-    especialidades_medicos,
     estados_civiles,
     etnias,
     evoluciones,
-    fotos,
     historias_clinicas,
     medicos,
     niveles_de_instruccion,

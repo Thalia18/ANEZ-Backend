@@ -23,37 +23,37 @@ const getAllEvolucionesPorHistoria = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-const getAllFotosPorEvolucion = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const fotos = await models.fotos.findAll({
-      where: { evolucion_id: id },
-      order: [['created_at', 'ASC']],
-    });
+// const getAllFotosPorEvolucion = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const fotos = await models.fotos.findAll({
+//       where: { evolucion_id: id },
+//       order: [['created_at', 'ASC']],
+//     });
 
-    return res.status(200).json({
-      data: fotos,
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
-const getAllFotosPorEvolucionP = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const fotos = await models.fotos.findAll({
-      where: { evolucion_id: id },
-      order: [['created_at', 'ASC']],
-      attributes: ['foto_url'],
-    });
+//     return res.status(200).json({
+//       data: fotos,
+//     });
+//   } catch (error) {
+//     return res.status(500).send(error.message);
+//   }
+// };
+// const getAllFotosPorEvolucionP = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const fotos = await models.fotos.findAll({
+//       where: { evolucion_id: id },
+//       order: [['created_at', 'ASC']],
+//       attributes: ['foto_url'],
+//     });
 
-    return res.status(200).json({
-      data: fotos,
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
+//     return res.status(200).json({
+//       data: fotos,
+//     });
+//   } catch (error) {
+//     return res.status(500).send(error.message);
+//   }
+// };
 const confirmUser = async (req, res) => {
   try {
     let user = req.params.usuario;
@@ -83,6 +83,7 @@ const confirmUser = async (req, res) => {
             cedula: medico.cedula,
             consultorio_id: medico.consultorio_id,
             medico_id: medico.medico_id,
+            especialidad: medico.especialidad,
           },
         });
       }
@@ -279,7 +280,6 @@ const getAllCitasFecha = async (req, res) => {
 };
 module.exports = {
   getAllEvolucionesPorHistoria,
-  getAllFotosPorEvolucion,
   confirmUser,
   getAllPacientesAutocomplete,
   getPacientesPorCedula,
@@ -287,7 +287,6 @@ module.exports = {
   getEvolucionesAutocomplete,
   getEvolucionesPorFecha,
   getPacienteporIdHistoria,
-  getAllFotosPorEvolucionP,
   getCitasPorFecha,
   getAllPacientesCedulaApellido,
   getAllCitasFecha,

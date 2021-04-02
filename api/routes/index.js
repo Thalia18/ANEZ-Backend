@@ -5,17 +5,14 @@ const CitaController = require('../controllers/citas');
 const ConsultorioController = require('../controllers/consultorios');
 const CustomController = require('../controllers/custom');
 const EspecialidadController = require('../controllers/especialidades');
-const EspecialidadMedicoController = require('../controllers/especialidades_medicos');
 const EstadoCivilController = require('../controllers/estados_civiles');
 const EtniaController = require('../controllers/etnias');
 const EvolucionController = require('../controllers/evoluciones');
-const FotoController = require('../controllers/fotos');
 const HistoriaClinicaController = require('../controllers/historias_clinicas');
 const MedicoController = require('../controllers//medicos');
 const NivelDeInstruccionController = require('../controllers/niveles_de_instruccion');
 const PacienteController = require('../controllers/pacientes');
 const RolController = require('../controllers/roles');
-const CategoriaEvolucionController = require('../controllers/categorias_evoluciones');
 const SubcategoriaController = require('../controllers/subcategorias');
 const TipoDeSangreController = require('../controllers/tipos_de_sangre');
 const UsuarioController = require('../controllers/usuarios');
@@ -38,28 +35,6 @@ router.get('/categoria/:id', Categoriaontroller.getCategoriaById);
 router.put('/categoria/:id', Categoriaontroller.updateCategoria);
 router.delete('/categoria/:id', Categoriaontroller.deleteCategoria);
 
-//categorias_evoluciones routes
-router.post(
-  '/categoria_evolucion',
-  CategoriaEvolucionController.createCategoriaEvolucion
-);
-router.get(
-  '/categorias_evoluciones',
-  CategoriaEvolucionController.getCategoriasEvoluciones
-);
-router.get(
-  '/categoria_evolucion/:id',
-  CategoriaEvolucionController.getCategoriaEvolucionById
-);
-router.put(
-  '/categoria_evolucion/:id',
-  CategoriaEvolucionController.updateCategoriaEvolucion
-);
-router.delete(
-  '/categoria_evolucion/:id',
-  CategoriaEvolucionController.deleteCategoriaEvolucion
-);
-
 //citas routes
 router.post('/cita', CitaController.createCita);
 router.get('/citas', CitaController.getAllCitas);
@@ -79,12 +54,10 @@ router.get(
   '/evoluciones_historia/:id',
   CustomController.getAllEvolucionesPorHistoria
 );
-router.get('/fotos_evolucion/:id', CustomController.getAllFotosPorEvolucion);
 router.get('/confirm_user/:usuario/:contrasena', CustomController.confirmUser);
 router.get('/autocomplete', CustomController.getAllPacientesAutocomplete);
 router.get('/cedula_paciente/:cedula', CustomController.getPacientesPorCedula);
 router.get('/historia_paciente/:id', CustomController.getHistoriaporIdPaciente);
-router.get('/fotos_evolucion_p/:id', CustomController.getAllFotosPorEvolucionP);
 
 router.get('/paciente_historia/:id', CustomController.getPacienteporIdHistoria);
 router.get(
@@ -109,28 +82,6 @@ router.get('/especialidad/:id', EspecialidadController.getEspecialidadById);
 router.put('/especialidad/:id', EspecialidadController.updateEspecialidad);
 router.delete('/especialidad/:id', EspecialidadController.deleteEspecialidad);
 
-//especialidades_medicos routes
-router.post(
-  '/especialidad_medico',
-  EspecialidadMedicoController.createEspecialidadMedico
-);
-router.get(
-  '/especialidades_medicos',
-  EspecialidadMedicoController.getAllEspecialidadesMedicos
-);
-router.get(
-  '/especialidad_medico/:id',
-  EspecialidadMedicoController.getEspecialidadMedicoById
-);
-router.put(
-  '/especialidad_medico/:id',
-  EspecialidadMedicoController.updateEspecialidadMedico
-);
-router.delete(
-  '/especialidad_medico/:id',
-  EspecialidadMedicoController.deleteEspecialidadMedico
-);
-
 //estados civiles routes
 router.post('/estado_civil', EstadoCivilController.createEstadoCivil);
 router.get('/estados_civiles', EstadoCivilController.getAllEstadosCiviles);
@@ -151,13 +102,6 @@ router.get('/evoluciones', EvolucionController.getAllEvoluciones);
 router.get('/evolucion/:id', EvolucionController.getEvolucionById);
 router.put('/evolucion/:id', EvolucionController.updateEvolucion);
 router.delete('/evolucion/:id', EvolucionController.deleteEvolucion);
-
-//fotos routes
-router.post('/foto', FotoController.createFoto);
-router.get('/fotos', FotoController.getAllFotos);
-router.get('/foto/:id', FotoController.getFotoById);
-router.put('/foto/:id', FotoController.updateFoto);
-router.delete('/foto/:id', FotoController.deleteFoto);
 
 //medicos routes
 router.post('/medico', MedicoController.createMedico);

@@ -41,6 +41,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.CHAR(150),
         allowNull: true,
       },
+      especialidad: {
+        type: DataTypes.JSON,
+        allowNull: false,
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -87,10 +91,6 @@ module.exports = function (sequelize, DataTypes) {
     Medicos.belongsTo(models.consultorios, {
       foreignKey: 'consultorio_id',
       as: 'consultorios',
-    });
-    Medicos.belongsTo(models.especialidades_medicos, {
-      foreignKey: 'medico_id',
-      as: 'medicos',
     });
     Medicos.belongsTo(models.usuarios, {
       foreignKey: 'medico_id',

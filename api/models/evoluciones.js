@@ -37,8 +37,16 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      diagnostico_cie10: {
+        type: DataTypes.JSON,
+        allowNull: true,
+      },
       medicacion: {
         type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      foto: {
+        type: DataTypes.JSON,
         allowNull: true,
       },
       proximo_control: {
@@ -86,13 +94,6 @@ module.exports = function (sequelize, DataTypes) {
     Evoluciones.belongsTo(models.historias_clinicas, {
       foreignKey: 'historia_clinica_id',
       as: 'historiaclinica',
-    });
-    Evoluciones.hasMany(models.fotos, {
-      foreignKey: 'evolucion_id',
-    });
-    Evoluciones.belongsTo(models.categorias_evoluciones, {
-      foreignKey: 'evolucion_id',
-      as: 'evoluciones',
     });
   };
   return Evoluciones;

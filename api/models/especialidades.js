@@ -44,11 +44,6 @@ module.exports = function (sequelize, DataTypes) {
       ],
     }
   );
-  Especialidades.associate = function (models) {
-    Especialidades.belongsTo(models.especialidades_medicos, {
-      foreignKey: 'especialidad_id',
-      as: 'especialidades',
-    });
-  };
+
   return Especialidades;
 };

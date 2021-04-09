@@ -2,7 +2,7 @@ module.exports = function (query, objectA) {
   var paginate = {};
 
   const page = parseInt(query) || 1;
-  const limit = 15;
+  const limit = 10;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const totalPages = Math.ceil(objectA.length / limit);

@@ -29,7 +29,10 @@ const createPaciente = async (req, res) => {
 const getAllPacientes = async (req, res) => {
   try {
     const pacientes = await models.pacientes.findAll({
-      order: [['apellido', 'ASC']],
+      order: [
+        ['apellido', 'ASC'],
+        ['nombre', 'ASC'],
+      ],
     });
     let data = pagination(req.query.page, pacientes);
     return res.status(200).json({

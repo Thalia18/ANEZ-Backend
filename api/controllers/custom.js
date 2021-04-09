@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const models = require('../models');
 const pagination = require('../utils/pagination');
 const paginationEvolucion = require('../utils/pagination/paginateEvoluciones');
+const paginationCitas = require('../utils/pagination/paginateCitas');
 
 const sequelize = require('sequelize');
 const Op = sequelize.Sequelize.Op;
@@ -101,7 +102,10 @@ const getAllPacientesCedulaApellido = async (req, res) => {
           },
         ],
       },
-      order: [['apellido', 'ASC']],
+      order: [
+        ['apellido', 'ASC'],
+        ['nombre', 'ASC'],
+      ],
       attributes: ['paciente_id', 'nombre', 'apellido', 'cedula', 'telefono'],
     });
     let data = pagination(req.query.page, pacientes);
@@ -207,10 +211,13 @@ const getCitasPorFecha = async (req, res) => {
           as: 'pacientes',
         },
       ],
+      order: [['fecha', 'ASC']],
     });
+    let data = paginationCitas(req.query.page, citas);
 
     return res.status(200).json({
-      data: citas,
+      info: data.paginate,
+      data: data.result,
     });
   } catch (error) {
     return res.status(500).send(error.message);

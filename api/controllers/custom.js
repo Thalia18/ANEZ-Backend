@@ -40,22 +40,36 @@ const confirmUser = async (req, res) => {
     if (usuario) {
       const match = await bcrypt.compareSync(password, usuario.contrasena);
       if (match) {
-        const medico = await models.medicos.findOne({
-          where: { usuario_id: usuario.usuario_id },
-        });
-        return res.status(200).json({
-          data: {
-            isLoggedIn: true,
-            usuario: usuario.usuario,
-            rol: usuario.rol.rol,
-            nombre: medico.nombre,
-            apellido: medico.apellido,
-            cedula: medico.cedula,
-            consultorio_id: medico.consultorio_id,
-            medico_id: medico.medico_id,
-            especialidad: medico.especialidad,
-          },
-        });
+        if (usuario.rol.rol.trim() !== 'recepcionista') {
+          const medico = await models.medicos.findOne({
+            where: { usuario_id: usuario.usuario_id },
+          });
+
+          return res.status(200).json({
+            data: {
+              isLoggedIn: true,
+              usuario: usuario.usuario,
+              rol: usuario.rol.rol,
+              nombre: usuario.nombre,
+              apellido: usuario.apellido,
+              cedula: usuario.cedula,
+              consultorio_id: medico.consultorio_id,
+              medico_id: medico.medico_id,
+              especialidad: medico.especialidad,
+            },
+          });
+        } else {
+          return res.status(200).json({
+            data: {
+              isLoggedIn: true,
+              usuario: usuario.usuario,
+              rol: usuario.rol.rol,
+              nombre: usuario.nombre,
+              apellido: usuario.apellido,
+              cedula: usuario.cedula,
+            },
+          });
+        }
       }
     }
     return res.status(404).send('Password or username incorrect');

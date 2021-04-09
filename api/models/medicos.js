@@ -25,22 +25,7 @@ module.exports = function (sequelize, DataTypes) {
           key: 'consultorio_id',
         },
       },
-      cedula: {
-        type: DataTypes.CHAR(15),
-        allowNull: false,
-      },
-      nombre: {
-        type: DataTypes.CHAR(60),
-        allowNull: false,
-      },
-      apellido: {
-        type: DataTypes.CHAR(60),
-        allowNull: false,
-      },
-      email: {
-        type: DataTypes.CHAR(150),
-        allowNull: true,
-      },
+
       especialidad: {
         type: DataTypes.JSON,
         allowNull: false,

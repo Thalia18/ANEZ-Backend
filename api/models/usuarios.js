@@ -36,6 +36,22 @@ module.exports = function (sequelize, DataTypes) {
           this.setDataValue('contrasena', hash);
         },
       },
+      cedula: {
+        type: DataTypes.CHAR(15),
+        allowNull: false,
+      },
+      nombre: {
+        type: DataTypes.CHAR(100),
+        allowNull: false,
+      },
+      apellido: {
+        type: DataTypes.CHAR(100),
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.CHAR(150),
+        allowNull: true,
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -55,6 +71,11 @@ module.exports = function (sequelize, DataTypes) {
           name: 'pk_usuarios',
           unique: true,
           fields: [{ name: 'usuario_id' }],
+        },
+        {
+          name: 'unique_usuario',
+          unique: true,
+          fields: [{ name: 'usuario' }],
         },
         {
           name: 'usuarios_pk',

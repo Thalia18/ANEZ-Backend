@@ -11,6 +11,14 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true,
       },
+      consultorio_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'consultorios',
+          key: 'consultorio_id',
+        },
+      },
       rol_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -68,6 +76,10 @@ module.exports = function (sequelize, DataTypes) {
       timestamps: false,
       indexes: [
         {
+          name: 'consultorios_usuarios_fk',
+          fields: [{ name: 'consultorio_id' }],
+        },
+        {
           name: 'pk_usuarios',
           unique: true,
           fields: [{ name: 'usuario_id' }],
@@ -96,6 +108,10 @@ module.exports = function (sequelize, DataTypes) {
     Usuarios.belongsTo(models.roles, {
       foreignKey: 'rol_id',
       as: 'rol',
+    });
+    Usuarios.belongsTo(models.consultorios, {
+      foreignKey: 'consultorio_id',
+      as: 'consultorios',
     });
   };
   return Usuarios;

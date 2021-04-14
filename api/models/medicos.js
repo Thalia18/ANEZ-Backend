@@ -17,15 +17,6 @@ module.exports = function (sequelize, DataTypes) {
           key: 'usuario_id',
         },
       },
-      consultorio_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'consultorios',
-          key: 'consultorio_id',
-        },
-      },
-
       especialidad: {
         type: DataTypes.JSON,
         allowNull: false,
@@ -49,10 +40,6 @@ module.exports = function (sequelize, DataTypes) {
       timestamps: true,
       indexes: [
         {
-          name: 'consultorios_medicos_fk',
-          fields: [{ name: 'consultorio_id' }],
-        },
-        {
           name: 'medicos_pk',
           unique: true,
           fields: [{ name: 'medico_id' }],
@@ -73,10 +60,7 @@ module.exports = function (sequelize, DataTypes) {
     Medicos.hasMany(models.citas, {
       foreignKey: 'medico_id',
     });
-    Medicos.belongsTo(models.consultorios, {
-      foreignKey: 'consultorio_id',
-      as: 'consultorios',
-    });
+
     Medicos.belongsTo(models.usuarios, {
       foreignKey: 'medico_id',
       as: 'usuario',

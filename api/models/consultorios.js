@@ -61,7 +61,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   );
   Consultorios.associate = function (models) {
-    Consultorios.hasMany(models.medicos, {
+    Consultorios.hasMany(models.usuarios, {
       foreignKey: 'consultorio_id',
     });
   };

@@ -40,7 +40,7 @@ const confirmUser = async (req, res) => {
     if (usuario) {
       const match = await bcrypt.compareSync(password, usuario.contrasena);
       if (match) {
-        if (usuario.rol.rol.trim() !== 'recepcionista') {
+        if (usuario.rol.rol.trim() === 'medico') {
           const medico = await models.medicos.findOne({
             where: { usuario_id: usuario.usuario_id },
           });
@@ -53,7 +53,7 @@ const confirmUser = async (req, res) => {
               nombre: usuario.nombre,
               apellido: usuario.apellido,
               cedula: usuario.cedula,
-              consultorio_id: medico.consultorio_id,
+              consultorio_id: usuario.consultorio_id,
               medico_id: medico.medico_id,
               especialidad: medico.especialidad,
             },
@@ -67,6 +67,7 @@ const confirmUser = async (req, res) => {
               nombre: usuario.nombre,
               apellido: usuario.apellido,
               cedula: usuario.cedula,
+              consultorio_id: usuario.consultorio_id,
             },
           });
         }

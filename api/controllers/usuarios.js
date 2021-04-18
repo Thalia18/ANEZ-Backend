@@ -11,7 +11,12 @@ const createUsuario = async (req, res) => {
 };
 const getAllUsuarios = async (req, res) => {
   try {
-    const usuarios = await models.usuarios.findAll();
+    const usuarios = await models.usuarios.findAll({
+      order: [
+        ['apellido', 'ASC'],
+        ['nombre', 'ASC'],
+      ],
+    });
     let data = pagination(req.query.page, usuarios);
     return res.status(200).json({
       info: data.paginate,

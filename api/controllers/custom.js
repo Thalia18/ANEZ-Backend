@@ -3,9 +3,9 @@ const models = require('../models');
 const pagination = require('../utils/pagination');
 const paginationEvolucion = require('../utils/pagination/paginateEvoluciones');
 const paginationCitas = require('../utils/pagination/paginateCitas');
-
-const sequelize = require('sequelize');
-const Op = sequelize.Sequelize.Op;
+const sequelizer = require('sequelize');
+const Op = sequelizer.Sequelize.Op;
+const { sequelize } = require('../models');
 
 const getAllEvolucionesPorHistoria = async (req, res) => {
   try {
@@ -247,7 +247,6 @@ const getAllCitasFecha = async (req, res) => {
     var day = fechaF[2];
     var fecha1 = year + '-' + month + '-01';
     var fecha2 = year + '-' + month + '-' + day;
-    console.log(fecha1, fecha2);
     const citas = await models.citas.findAll({
       where: { fecha: { [Op.between]: [fecha1, fecha2] } },
       order: [
@@ -269,6 +268,41 @@ const getAllCitasFecha = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+const getMedicoPorEspecialidades = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const medicos = await sequelize.query(
+      `select medico_id, nombre, apellido, medicos.usuario_id from usuarios, medicos, json_to_recordset(medicos.especialidad) as x(id int,value text) 
+      where x.id = ${id} and usuarios.usuario_id=medicos.usuario_id`,
+      {
+        model: models.medicos,
+        mapToModel: true,
+      }
+    );
+    return res.status(200).json({
+      data: medicos,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+const getMedicoPorUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const medico = await sequelize.query(
+      `select medico_id, nombre, apellido, medicos.usuario_id from usuarios, medicos where medico_id=${id} and usuarios.usuario_id=medicos.usuario_id`,
+      {
+        model: models.medicos,
+        mapToModel: true,
+      }
+    );
+    return res.status(200).json({
+      data: medico,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
 module.exports = {
   getAllEvolucionesPorHistoria,
   confirmUser,
@@ -281,4 +315,6 @@ module.exports = {
   getCitasPorFecha,
   getAllPacientesCedulaApellido,
   getAllCitasFecha,
+  getMedicoPorEspecialidades,
+  getMedicoPorUsuario,
 };

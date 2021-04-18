@@ -85,13 +85,28 @@ const updateCita = async (req, res) => {
       include: [
         {
           model: models.pacientes,
-          attributes: ['nombre', 'apellido'],
+          attributes: ['nombre', 'apellido', 'paciente_id'],
           as: 'pacientes',
         },
       ],
     });
+
     if (cita) {
-      return res.status(200).json({ data: cita });
+      if (cita.paciente_id !== req.body.paciente_id) {
+        return res.status(200).json({ data: cita });
+      } else {
+        const { id } = req.params;
+        const [updated] = await models.citas.update(req.body, {
+          where: { cita_id: id },
+        });
+        if (updated) {
+          await models.citas.findOne({
+            where: { cita_id: id },
+          });
+          return res.status(200).send('Updated');
+        }
+        throw new Error('Not found');
+      }
     } else {
       const { id } = req.params;
       const [updated] = await models.citas.update(req.body, {
@@ -106,6 +121,7 @@ const updateCita = async (req, res) => {
       throw new Error('Not found');
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };

@@ -74,6 +74,11 @@ router.get(
   CustomController.getAllPacientesCedulaApellido
 );
 router.get('/citas_fecha/:fecha', CustomController.getAllCitasFecha);
+router.get(
+  '/medicos_especialidades/:id',
+  CustomController.getMedicoPorEspecialidades
+);
+router.get('/medicos_usuario/:id', CustomController.getMedicoPorUsuario);
 
 //especialidades routes
 router.post('/especialidad', EspecialidadController.createEspecialidad);

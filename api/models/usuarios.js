@@ -47,6 +47,7 @@ module.exports = function (sequelize, DataTypes) {
       cedula: {
         type: DataTypes.CHAR(15),
         allowNull: false,
+        unique: 'unique_cedula_usuario',
       },
       nombre: {
         type: DataTypes.CHAR(100),
@@ -60,13 +61,23 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.CHAR(150),
         allowNull: true,
       },
-      created_at: {
-        type: DataTypes.DATE,
-        allowNull: true,
+      telefono: {
+        type: DataTypes.CHAR(15),
+        allowNull: false,
       },
-      updated_at: {
+      fecha_nacimiento: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
+      createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
+        field: 'created_at',
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'updated_at',
       },
     },
     {
@@ -83,6 +94,11 @@ module.exports = function (sequelize, DataTypes) {
           name: 'pk_usuarios',
           unique: true,
           fields: [{ name: 'usuario_id' }],
+        },
+        {
+          name: 'unique_cedula_usuario',
+          unique: true,
+          fields: [{ name: 'cedula' }],
         },
         {
           name: 'unique_usuario',

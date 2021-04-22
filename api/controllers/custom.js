@@ -6,6 +6,7 @@ const paginationCitas = require('../utils/pagination/paginateCitas');
 const sequelizer = require('sequelize');
 const Op = sequelizer.Sequelize.Op;
 const { sequelize } = require('../models');
+const mail = require('../nodemailer');
 
 const getAllEvolucionesPorHistoria = async (req, res) => {
   try {
@@ -303,6 +304,37 @@ const getMedicoPorUsuario = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+const updateUsuarioPass = async (req, res) => {
+  try {
+    const { id, email } = req.params;
+    const [updated] = await models.usuarios.update(req.body, {
+      where: { usuario_id: id },
+    });
+    if (updated) {
+      await models.usuarios.findOne({
+        where: { usuario_id: id },
+      });
+      mail(email, req.body.contrasena);
+      return res.status(200).send('Updated');
+    }
+    throw new Error('Not found');
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+const getMedicoPorUsuarioId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const medico = await models.medicos.findOne({
+      where: { usuario_id: id },
+    });
+    return res.status(200).json({
+      data: medico,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
 module.exports = {
   getAllEvolucionesPorHistoria,
   confirmUser,
@@ -317,4 +349,6 @@ module.exports = {
   getAllCitasFecha,
   getMedicoPorEspecialidades,
   getMedicoPorUsuario,
+  updateUsuarioPass,
+  getMedicoPorUsuarioId,
 };

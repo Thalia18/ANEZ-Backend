@@ -79,6 +79,8 @@ router.get(
   CustomController.getMedicoPorEspecialidades
 );
 router.get('/medicos_usuario/:id', CustomController.getMedicoPorUsuario);
+router.patch('/usuario_pass/:id/:email', CustomController.updateUsuarioPass);
+router.get('/medicos_usuario_id/:id', CustomController.getMedicoPorUsuarioId);
 
 //especialidades routes
 router.post('/especialidad', EspecialidadController.createEspecialidad);
@@ -191,7 +193,7 @@ router.delete('/tipo_de_sangre/:id', TipoDeSangreController.deleteTipoDeSangre);
 router.post('/usuario', UsuarioController.createUsuario);
 router.get('/usuarios', UsuarioController.getAllUsuarios);
 router.get('/usuario/:id', UsuarioController.getUsuarioById);
-router.put('/usuario/:id', UsuarioController.updateUsuario);
+router.patch('/usuario/:id', UsuarioController.updateUsuario);
 router.delete('/usuario/:id', UsuarioController.deleteUsuario);
 
 module.exports = router;

@@ -6,7 +6,6 @@ const createPaciente = async (req, res) => {
     const paciente = await models.pacientes.findOne({
       where: { cedula: req.body.cedula },
     });
-    console.log(paciente, 'paciente por cedula');
     if (paciente !== null) {
       return res.status(200).json({
         data: {

@@ -81,6 +81,10 @@ router.get(
 router.get('/medicos_usuario/:id', CustomController.getMedicoPorUsuario);
 router.patch('/usuario_pass/:id/:email', CustomController.updateUsuarioPass);
 router.get('/medicos_usuario_id/:id', CustomController.getMedicoPorUsuarioId);
+router.get(
+  '/usuarios_buscar/:value',
+  CustomController.getUsuariosPorApellidoNombreUsuario
+);
 
 //especialidades routes
 router.post('/especialidad', EspecialidadController.createEspecialidad);

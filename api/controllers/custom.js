@@ -335,6 +335,45 @@ const getMedicoPorUsuarioId = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+const getUsuariosPorApellidoNombreUsuario = async (req, res) => {
+  var { value } = req.params;
+  try {
+    const usuarios = await models.usuarios.findAll({
+      where: {
+        [Op.or]: [
+          {
+            apellido: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+          {
+            nombre: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+          {
+            usuario: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+        ],
+      },
+      order: [
+        ['apellido', 'ASC'],
+        ['nombre', 'ASC'],
+      ],
+      attributes: ['usuario_id', 'nombre', 'apellido', 'usuario'],
+    });
+    let data = pagination(req.query.page, usuarios);
+    return res.status(200).json({
+      info: data.paginate,
+      data: data.result,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 module.exports = {
   getAllEvolucionesPorHistoria,
   confirmUser,
@@ -351,4 +390,5 @@ module.exports = {
   getMedicoPorUsuario,
   updateUsuarioPass,
   getMedicoPorUsuarioId,
+  getUsuariosPorApellidoNombreUsuario,
 };

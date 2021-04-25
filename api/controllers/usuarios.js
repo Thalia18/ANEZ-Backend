@@ -49,6 +49,18 @@ const getUsuarioById = async (req, res) => {
     const { id } = req.params;
     const usuario = await models.usuarios.findOne({
       where: { usuario_id: id },
+      attributes: [
+        'usuario_id',
+        'usuario',
+        'nombre',
+        'apellido',
+        'cedula',
+        'email',
+        'fecha_nacimiento',
+        'telefono',
+        'consultorio_id',
+        'rol_id',
+      ],
       include: [
         { model: models.roles, as: 'rol', attributes: ['rol'] },
         {
@@ -70,9 +82,32 @@ const getUsuarioById = async (req, res) => {
 const updateUsuario = async (req, res) => {
   try {
     const { id } = req.params;
-    const [updated] = await models.usuarios.update(req.body, {
-      where: { usuario_id: id },
-    });
+    const {
+      nombre,
+      apellido,
+      cedula,
+      email,
+      fecha_nacimiento,
+      telefono,
+      consultorio_id,
+      rol_id,
+    } = req.body;
+    const [updated] = await models.usuarios.update(
+      {
+        nombre,
+        apellido,
+        cedula,
+        email,
+        fecha_nacimiento,
+        telefono,
+        consultorio_id,
+        rol_id,
+      },
+      {
+        where: { usuario_id: id },
+      }
+    );
+    console.log(updated);
     if (updated) {
       await models.usuarios.findOne({
         where: { usuario_id: id },

@@ -26,7 +26,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       logo: {
-        type: DataTypes.CHAR(250),
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       createdAt: {
@@ -56,6 +56,11 @@ module.exports = function (sequelize, DataTypes) {
           name: 'pk_consultorios',
           unique: true,
           fields: [{ name: 'consultorio_id' }],
+        },
+        {
+          name: 'unique_nombre',
+          unique: true,
+          fields: [{ name: 'nombre' }],
         },
       ],
     }

@@ -75,6 +75,7 @@ const getCitaById = async (req, res) => {
 };
 
 const updateCita = async (req, res) => {
+  const { id } = req.params;
   try {
     const cita = await models.citas.findOne({
       where: {
@@ -95,7 +96,6 @@ const updateCita = async (req, res) => {
       if (cita.paciente_id !== req.body.paciente_id) {
         return res.status(200).json({ data: cita });
       } else {
-        const { id } = req.params;
         const [updated] = await models.citas.update(req.body, {
           where: { cita_id: id },
         });
@@ -108,7 +108,6 @@ const updateCita = async (req, res) => {
         throw new Error('Not found');
       }
     } else {
-      const { id } = req.params;
       const [updated] = await models.citas.update(req.body, {
         where: { cita_id: id },
       });

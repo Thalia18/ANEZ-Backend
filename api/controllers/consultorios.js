@@ -3,15 +3,34 @@ const pagination = require('../utils/pagination');
 
 const createConsultorio = async (req, res) => {
   try {
-    await models.consultorios.create(req.body);
-    return res.status(201).send('Created');
+    const consultorio = await models.consultorios.findOne({
+      where: {
+        nombre: req.body.nombre,
+      },
+    });
+    if (consultorio) {
+      return res.status(200).json({
+        info: {
+          exist: true,
+        },
+      });
+    } else {
+      await models.consultorios.create(req.body);
+      return res.status(201).json({
+        info: {
+          exist: false,
+        },
+      });
+    }
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 const getAllConsultorios = async (req, res) => {
   try {
-    const consultorios = await models.consultorios.findAll();
+    const consultorios = await models.consultorios.findAll({
+      order: [['nombre', 'ASC']],
+    });
     let data = pagination(req.query.page, consultorios);
     return res.status(200).json({
       info: data.paginate,
@@ -40,17 +59,49 @@ const getConsultorioById = async (req, res) => {
 const updateConsultorio = async (req, res) => {
   try {
     const { id } = req.params;
-    const [updated] = await models.consultorios.update(req.body, {
-      where: { consultorio_id: id },
+    const consultorio = await models.consultorios.findOne({
+      where: { nombre: req.body.nombre },
     });
-    if (updated) {
-      await models.consultorios.findOne({
+
+    if (consultorio) {
+      if (consultorio.consultorio_id.toString() === id) {
+        const [updated] = await models.consultorios.update(req.body, {
+          where: { consultorio_id: id },
+        });
+        if (updated) {
+          await models.consultorios.findOne({
+            where: { consultorio_id: id },
+          });
+          return res.status(200).json({
+            data: {
+              exist: false,
+            },
+          });
+        } else throw new Error('Not found');
+      } else {
+        return res.status(200).json({
+          data: {
+            exist: true,
+          },
+        });
+      }
+    } else {
+      const [updated] = await models.consultorios.update(req.body, {
         where: { consultorio_id: id },
       });
-      return res.status(200).send('Updated');
+      if (updated) {
+        await models.consultorios.findOne({
+          where: { consultorio_id: id },
+        });
+        return res.status(200).json({
+          data: {
+            exist: false,
+          },
+        });
+      } else throw new Error('Not found');
     }
-    throw new Error('Not found');
   } catch (error) {
+    console.log(error);
     return res.status(500).send(error.message);
   }
 };

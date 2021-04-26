@@ -1,6 +1,6 @@
 const models = require('../models');
 const pagination = require('../utils/pagination');
-const mail = require('../nodemailer');
+const mail = require('../nodemailer/creacion_usuario');
 
 const createUsuario = async (req, res) => {
   try {
@@ -14,12 +14,12 @@ const createUsuario = async (req, res) => {
         },
       });
     } else {
-      const result = await models.usuarios.create(req.body);
-      return res.status(200).json({
+      await models.usuarios.create(req.body);
+      mail(req.body.email, req.body.contrasena, req.body.usuario);
+      return res.status(201).json({
         info: {
           exist: false,
         },
-        data: { result },
       });
     }
   } catch (error) {
@@ -81,6 +81,9 @@ const getUsuarioById = async (req, res) => {
 
 const updateUsuario = async (req, res) => {
   try {
+    const usuario = await models.usuarios.findOne({
+      where: { cedula: req.body.cedula },
+    });
     const { id } = req.params;
     const {
       nombre,
@@ -91,31 +94,73 @@ const updateUsuario = async (req, res) => {
       telefono,
       consultorio_id,
       rol_id,
+      updated_at,
     } = req.body;
-    const [updated] = await models.usuarios.update(
-      {
-        nombre,
-        apellido,
-        cedula,
-        email,
-        fecha_nacimiento,
-        telefono,
-        consultorio_id,
-        rol_id,
-      },
-      {
-        where: { usuario_id: id },
+    if (usuario) {
+      if (usuario.usuario_id.toString() === id) {
+        const [updated] = await models.usuarios.update(
+          {
+            nombre,
+            apellido,
+            cedula,
+            email,
+            fecha_nacimiento,
+            telefono,
+            consultorio_id,
+            rol_id,
+            updated_at,
+          },
+          {
+            where: { usuario_id: id },
+          }
+        );
+
+        if (updated) {
+          await models.usuarios.findOne({
+            where: { usuario_id: id },
+          });
+          return res.status(200).json({
+            data: {
+              exist: false,
+            },
+          });
+        } else throw new Error('Not found');
+      } else {
+        return res.status(200).json({
+          data: {
+            exist: true,
+          },
+        });
       }
-    );
-    console.log(updated);
-    if (updated) {
-      await models.usuarios.findOne({
-        where: { usuario_id: id },
-      });
-      // mail('thaly18.98@gmail.com', req.body.contrasena);
-      return res.status(200).json({ data: updated });
+    } else {
+      const [updated] = await models.usuarios.update(
+        {
+          nombre,
+          apellido,
+          cedula,
+          email,
+          fecha_nacimiento,
+          telefono,
+          consultorio_id,
+          rol_id,
+          updated_at,
+        },
+        {
+          where: { usuario_id: id },
+        }
+      );
+
+      if (updated) {
+        await models.usuarios.findOne({
+          where: { usuario_id: id },
+        });
+        return res.status(200).json({
+          data: {
+            exist: false,
+          },
+        });
+      } else throw new Error('Not found');
     }
-    throw new Error('Not found');
   } catch (error) {
     console.log(error);
     return res.status(500).send(error.message);

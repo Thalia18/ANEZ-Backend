@@ -71,7 +71,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       email: {
-        type: DataTypes.CHAR(150),
+        type: DataTypes.CHAR(250),
         allowNull: true,
       },
       contacto_emergencia_nombre: {

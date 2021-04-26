@@ -85,6 +85,10 @@ router.get(
   '/usuarios_buscar/:value',
   CustomController.getUsuariosPorApellidoNombreUsuario
 );
+router.get(
+  '/consultorios_buscar/:value',
+  CustomController.getConsultoriosPorNombreyRuc
+);
 
 //especialidades routes
 router.post('/especialidad', EspecialidadController.createEspecialidad);

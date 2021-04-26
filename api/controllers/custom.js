@@ -5,8 +5,8 @@ const paginationEvolucion = require('../utils/pagination/paginateEvoluciones');
 const paginationCitas = require('../utils/pagination/paginateCitas');
 const sequelizer = require('sequelize');
 const Op = sequelizer.Sequelize.Op;
-const { sequelize } = require('../models');
 const mail = require('../nodemailer');
+const { sequelize } = require('../models');
 
 const getAllEvolucionesPorHistoria = async (req, res) => {
   try {
@@ -373,7 +373,35 @@ const getUsuariosPorApellidoNombreUsuario = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
+const getConsultoriosPorNombreyRuc = async (req, res) => {
+  var { value } = req.params;
+  try {
+    const consultorios = await models.consultorios.findAll({
+      where: {
+        [Op.or]: [
+          {
+            nombre: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+          {
+            ruc: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+        ],
+      },
+      order: [['nombre', 'ASC']],
+    });
+    let data = pagination(req.query.page, consultorios);
+    return res.status(200).json({
+      info: data.paginate,
+      data: data.result,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
 module.exports = {
   getAllEvolucionesPorHistoria,
   confirmUser,
@@ -391,4 +419,5 @@ module.exports = {
   updateUsuarioPass,
   getMedicoPorUsuarioId,
   getUsuariosPorApellidoNombreUsuario,
+  getConsultoriosPorNombreyRuc,
 };

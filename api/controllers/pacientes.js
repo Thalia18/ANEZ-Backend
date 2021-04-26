@@ -69,18 +69,54 @@ const getPacienteById = async (req, res) => {
 
 const updatePaciente = async (req, res) => {
   try {
-    const { id } = req.params;
-    const updated = await models.pacientes.update(req.body, {
-      where: { paciente_id: id },
+    const paciente = await models.pacientes.findOne({
+      where: { cedula: req.body.cedula },
     });
-    if (updated) {
-      await models.pacientes.findOne({
+    const { id } = req.params;
+
+    if (paciente) {
+      if (paciente.paciente_id.toString() === id) {
+        const updated = await models.pacientes.update(req.body, {
+          where: { paciente_id: id },
+        });
+        if (updated) {
+          await models.pacientes.findOne({
+            where: { paciente_id: id },
+          });
+          return res.status(200).json({
+            data: {
+              exist: false,
+            },
+          });
+        } else {
+          throw new Error('Not found');
+        }
+      } else {
+        return res.status(200).json({
+          data: {
+            exist: true,
+          },
+        });
+      }
+    } else {
+      const updated = await models.pacientes.update(req.body, {
         where: { paciente_id: id },
       });
-      return res.status(200).send('Updated');
+      if (updated) {
+        await models.pacientes.findOne({
+          where: { paciente_id: id },
+        });
+        return res.status(200).json({
+          data: {
+            exist: false,
+          },
+        });
+      } else {
+        throw new Error('Not found');
+      }
     }
-    throw new Error('Not found');
   } catch (error) {
+    console.log(error);
     return res.status(500).send(error);
   }
 };

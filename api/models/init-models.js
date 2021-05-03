@@ -7,6 +7,7 @@ var _especialidades = require('./especialidades');
 var _estados_civiles = require('./estados_civiles');
 var _etnias = require('./etnias');
 var _evoluciones = require('./evoluciones');
+var _generos = require('./generos');
 var _historias_clinicas = require('./historias_clinicas');
 var _medicos = require('./medicos');
 var _niveles_de_instruccion = require('./niveles_de_instruccion');
@@ -25,6 +26,7 @@ function initModels(sequelize) {
   var estados_civiles = _estados_civiles(sequelize, DataTypes);
   var etnias = _etnias(sequelize, DataTypes);
   var evoluciones = _evoluciones(sequelize, DataTypes);
+  var generos = _generos(sequelize, DataTypes);
   var historias_clinicas = _historias_clinicas(sequelize, DataTypes);
   var medicos = _medicos(sequelize, DataTypes);
   var niveles_de_instruccion = _niveles_de_instruccion(sequelize, DataTypes);
@@ -54,6 +56,8 @@ function initModels(sequelize) {
   estados_civiles.hasMany(pacientes, { foreignKey: 'estado_civil_id' });
   pacientes.belongsTo(etnias, { foreignKey: 'etnia_id' });
   etnias.hasMany(pacientes, { foreignKey: 'etnia_id' });
+  pacientes.belongsTo(generos, { foreignKey: 'genero_id' });
+  generos.hasMany(pacientes, { foreignKey: 'genero_id' });
   pacientes.belongsTo(niveles_de_instruccion, {
     foreignKey: 'nivel_de_instruccion_id',
   });
@@ -78,6 +82,7 @@ function initModels(sequelize) {
     estados_civiles,
     etnias,
     evoluciones,
+    generos,
     historias_clinicas,
     medicos,
     niveles_de_instruccion,

@@ -73,8 +73,9 @@ const confirmUser = async (req, res) => {
           });
         }
       }
+    } else {
+      return res.status(404).send('Password or username incorrect');
     }
-    return res.status(404).send('Password or username incorrect');
   } catch (error) {
     console.log(error);
     return res.status(500).send(error.message);

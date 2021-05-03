@@ -14,10 +14,11 @@ const createUsuario = async (req, res) => {
         },
       });
     } else {
-      await models.usuarios.create(req.body);
+      const user = await models.usuarios.create(req.body);
       mail(req.body.email, req.body.contrasena, req.body.usuario);
       return res.status(201).json({
         info: {
+          usuario_id: user.usuario_id,
           exist: false,
         },
       });

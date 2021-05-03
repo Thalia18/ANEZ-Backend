@@ -6,6 +6,7 @@ const createMedico = async (req, res) => {
     await models.medicos.create(req.body);
     return res.status(200).send('Created');
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };

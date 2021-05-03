@@ -25,6 +25,14 @@ module.exports = function (sequelize, DataTypes) {
           key: 'etnia_id',
         },
       },
+      genero_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'generos',
+          key: 'genero_id',
+        },
+      },
       nivel_de_instruccion_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -42,11 +50,11 @@ module.exports = function (sequelize, DataTypes) {
         },
       },
       nombre: {
-        type: DataTypes.CHAR(100),
+        type: DataTypes.CHAR(60),
         allowNull: false,
       },
       apellido: {
-        type: DataTypes.CHAR(100),
+        type: DataTypes.CHAR(60),
         allowNull: false,
       },
       cedula: {
@@ -72,10 +80,10 @@ module.exports = function (sequelize, DataTypes) {
       },
       email: {
         type: DataTypes.CHAR(250),
-        allowNull: true,
+        allowNull: false,
       },
       contacto_emergencia_nombre: {
-        type: DataTypes.CHAR(150),
+        type: DataTypes.CHAR(100),
         allowNull: true,
       },
       contacto_emergencia_telefono: {
@@ -98,24 +106,28 @@ module.exports = function (sequelize, DataTypes) {
       timestamps: false,
       indexes: [
         {
+          name: 'pacientes_estados_civiles_fk',
+          fields: [{ name: 'estado_civil_id' }],
+        },
+        {
+          name: 'pacientes_etnias_fk',
+          fields: [{ name: 'etnia_id' }],
+        },
+        {
+          name: 'pacientes_generos_fk',
+          fields: [{ name: 'genero_id' }],
+        },
+        {
+          name: 'pacientes_niveles_de_instruccio',
+          fields: [{ name: 'nivel_de_instruccion_id' }],
+        },
+        {
           name: 'pacientes_pk',
           unique: true,
           fields: [{ name: 'paciente_id' }],
         },
         {
-          name: 'pacientesestadosciviles_fk',
-          fields: [{ name: 'estado_civil_id' }],
-        },
-        {
-          name: 'pacientesetnias_fk',
-          fields: [{ name: 'etnia_id' }],
-        },
-        {
-          name: 'pacientesnivelesdeinstruccion_f',
-          fields: [{ name: 'nivel_de_instruccion_id' }],
-        },
-        {
-          name: 'pacientestiposdesangre_fk',
+          name: 'pacientes_tipos_de_sangre_fk',
           fields: [{ name: 'tipo_de_sangre_id' }],
         },
         {
@@ -135,6 +147,10 @@ module.exports = function (sequelize, DataTypes) {
     Pacientes.belongsTo(models.etnias, {
       foreignKey: 'etnia_id',
       as: 'etnias',
+    });
+    Pacientes.belongsTo(models.generos, {
+      foreignKey: 'genero_id',
+      as: 'generos',
     });
     Pacientes.belongsTo(models.estados_civiles, {
       foreignKey: 'estado_civil_id',

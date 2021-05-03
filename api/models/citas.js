@@ -37,6 +37,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      telefono_paciente: {
+        type: DataTypes.CHAR(15),
+        allowNull: true,
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,

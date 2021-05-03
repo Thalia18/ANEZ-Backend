@@ -26,6 +26,7 @@ const createCita = async (req, res) => {
       return res.status(201).send('Created');
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -93,7 +94,7 @@ const updateCita = async (req, res) => {
     });
 
     if (cita) {
-      if (cita.paciente_id !== req.body.paciente_id) {
+      if (cita.paciente_id.toString() !== req.body.paciente_id) {
         return res.status(200).json({ data: cita });
       } else {
         const [updated] = await models.citas.update(req.body, {

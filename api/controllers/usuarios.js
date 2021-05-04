@@ -98,7 +98,7 @@ const updateUsuario = async (req, res) => {
       updated_at,
     } = req.body;
     if (usuario) {
-      if (usuario.usuario_id.toString() === id) {
+      if (usuario.usuario_id.toString() === id.toString()) {
         const [updated] = await models.usuarios.update(
           {
             nombre,

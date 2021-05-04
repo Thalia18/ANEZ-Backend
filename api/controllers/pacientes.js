@@ -56,6 +56,7 @@ const getPacienteById = async (req, res) => {
         { model: models.estados_civiles, as: 'estadocivil' },
         { model: models.niveles_de_instruccion, as: 'niveldeinstruccion' },
         { model: models.tipos_de_sangre, as: 'tipodesangre' },
+        { model: models.generos, as: 'generos' },
       ],
     });
     if (pacient) {
@@ -75,7 +76,7 @@ const updatePaciente = async (req, res) => {
     const { id } = req.params;
 
     if (paciente) {
-      if (paciente.paciente_id.toString() === id) {
+      if (paciente.paciente_id.toString() === id.toString()) {
         const updated = await models.pacientes.update(req.body, {
           where: { paciente_id: id },
         });

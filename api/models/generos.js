@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function (sequelize, DataTypes) {
-  return sequelize.define(
+  const Generos = sequelize.define(
     'generos',
     {
       genero_id: {
@@ -43,4 +43,10 @@ module.exports = function (sequelize, DataTypes) {
       ],
     }
   );
+  Generos.associate = function (models) {
+    Generos.hasMany(models.pacientes, {
+      foreignKey: 'genero_id',
+    });
+  };
+  return Generos;
 };

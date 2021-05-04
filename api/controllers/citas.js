@@ -5,11 +5,11 @@ const Op = sequelize.Sequelize.Op;
 
 const createCita = async (req, res) => {
   try {
-    const cita = await models.citas.findOne({
+    const cita_med = await models.citas.findOne({
       where: {
-        // paciente_id: req.body.paciente_id,
         fecha: req.body.fecha,
         hora: req.body.hora,
+        medico_id: req.body.medico_id,
       },
       include: [
         {
@@ -17,10 +17,33 @@ const createCita = async (req, res) => {
           attributes: ['nombre', 'apellido'],
           as: 'pacientes',
         },
+        {
+          model: models.medicos,
+          as: 'medicos',
+        },
       ],
     });
-    if (cita) {
-      return res.status(200).json({ data: cita });
+    const cita_pac = await models.citas.findOne({
+      where: {
+        paciente_id: req.body.paciente_id,
+        fecha: req.body.fecha,
+        hora: req.body.hora,
+        // medico_id: req.body.medico_id,
+      },
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido'],
+          as: 'pacientes',
+        },
+        {
+          model: models.medicos,
+          as: 'medicos',
+        },
+      ],
+    });
+    if (cita_med || cita_pac) {
+      return res.status(200).json({ data: cita_pac || cita_med });
     } else {
       await models.citas.create(req.body);
       return res.status(201).send('Created');
@@ -78,9 +101,9 @@ const getCitaById = async (req, res) => {
 const updateCita = async (req, res) => {
   const { id } = req.params;
   try {
-    const cita = await models.citas.findOne({
+    const cita_pac = await models.citas.findOne({
       where: {
-        // paciente_id: req.body.paciente_id,
+        paciente_id: req.body.paciente_id,
         fecha: req.body.fecha,
         hora: req.body.hora,
       },
@@ -90,12 +113,35 @@ const updateCita = async (req, res) => {
           attributes: ['nombre', 'apellido', 'paciente_id'],
           as: 'pacientes',
         },
+        {
+          model: models.medicos,
+          as: 'medicos',
+        },
       ],
     });
-
-    if (cita) {
-      if (cita.paciente_id.toString() !== req.body.paciente_id) {
-        return res.status(200).json({ data: cita });
+    const cita_med = await models.citas.findOne({
+      where: {
+        fecha: req.body.fecha,
+        hora: req.body.hora,
+        medico_id: req.body.medico_id,
+      },
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido', 'paciente_id'],
+          as: 'pacientes',
+        },
+        {
+          model: models.medicos,
+          as: 'medicos',
+        },
+      ],
+    });
+    console.log(cita_pac ? true : false);
+    console.log(cita_med ? true : false);
+    if (cita_pac && !cita_med) {
+      if (cita_pac.paciente_id.toString() !== req.body.paciente_id.toString()) {
+        return res.status(200).json({ data: cita_pac });
       } else {
         const [updated] = await models.citas.update(req.body, {
           where: { cita_id: id },
@@ -108,7 +154,7 @@ const updateCita = async (req, res) => {
         }
         throw new Error('Not found');
       }
-    } else {
+    } else if (!cita_pac && !cita_med) {
       const [updated] = await models.citas.update(req.body, {
         where: { cita_id: id },
       });
@@ -119,6 +165,10 @@ const updateCita = async (req, res) => {
         return res.status(200).send('Updated');
       }
       throw new Error('Not found');
+    } else if (!cita_pac && cita_med) {
+      return res.status(200).json({ data: cita_med });
+    } else {
+      return res.status(200).json({ data: cita_pac });
     }
   } catch (error) {
     console.log(error);

@@ -240,6 +240,41 @@ const getCitasPorFecha = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+const getCitasPorFechaMed = async (req, res) => {
+  try {
+    const { fecha1, fecha2, id } = req.params;
+    const citas = await models.citas.findAll({
+      where: {
+        [Op.and]: [
+          {
+            fecha: { [Op.between]: [fecha1, fecha2] },
+          },
+          {
+            medico_id: id,
+          },
+        ],
+      },
+
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido', 'cedula'],
+          as: 'pacientes',
+        },
+      ],
+      order: [['fecha', 'ASC']],
+    });
+    let data = paginationCitas(req.query.page, citas);
+
+    return res.status(200).json({
+      info: data.paginate,
+      data: data.result,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 const getAllCitasFecha = async (req, res) => {
   try {
     const { fecha } = req.params;
@@ -251,6 +286,45 @@ const getAllCitasFecha = async (req, res) => {
     var fecha2 = year + '-' + month + '-' + day;
     const citas = await models.citas.findAll({
       where: { fecha: { [Op.between]: [fecha1, fecha2] } },
+      order: [
+        ['fecha', 'ASC'],
+        ['hora', 'ASC'],
+      ],
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido', 'cedula'],
+          as: 'pacientes',
+        },
+      ],
+    });
+    return res.status(200).json({
+      data: citas,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+const getAllCitasFechaMed = async (req, res) => {
+  try {
+    const { fecha, id } = req.params;
+    var fechaF = fecha.split('-');
+    var year = fechaF[0];
+    var month = fechaF[1];
+    var day = fechaF[2];
+    var fecha1 = year + '-' + month + '-01';
+    var fecha2 = year + '-' + month + '-' + day;
+    const citas = await models.citas.findAll({
+      where: {
+        [Op.and]: [
+          {
+            fecha: { [Op.between]: [fecha1, fecha2] },
+          },
+          {
+            medico_id: id,
+          },
+        ],
+      },
       order: [
         ['fecha', 'ASC'],
         ['hora', 'ASC'],
@@ -421,4 +495,6 @@ module.exports = {
   getMedicoPorUsuarioId,
   getUsuariosPorApellidoNombreUsuario,
   getConsultoriosPorNombreyRuc,
+  getAllCitasFechaMed,
+  getCitasPorFechaMed,
 };

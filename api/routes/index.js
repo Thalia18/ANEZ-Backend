@@ -20,9 +20,11 @@ const UsuarioController = require('../controllers/usuarios');
 const AuthController = require('../auth');
 
 const {
-  authenticateJWTMedAdm,
+  authenticateJWTMedRec,
   authenticateJWTAdmin,
+  authenticateJWTMed,
   authenticateJWTAll,
+  authenticateJWTMedAdmin,
 } = require('../auth/authenticate');
 
 const router = Router();
@@ -40,12 +42,12 @@ router.post(
 );
 router.get(
   '/capitulos',
-  authenticateJWTMedAdm,
+  authenticateJWTMedAdmin,
   CapituloController.getAllCapitulos
 );
 router.get(
   '/capitulo/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMedAdmin,
   CapituloController.getCapituloById
 );
 router.put(
@@ -67,12 +69,12 @@ router.post(
 );
 router.get(
   '/categorias',
-  authenticateJWTMedAdm,
+  authenticateJWTMedAdmin,
   Categoriaontroller.getAllCategorias
 );
 router.get(
   '/categoria/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMedAdmin,
   Categoriaontroller.getCategoriaById
 );
 router.put(
@@ -87,11 +89,11 @@ router.delete(
 );
 
 //citas routes
-router.post('/cita', authenticateJWTAll, CitaController.createCita);
-router.get('/citas', authenticateJWTAll, CitaController.getAllCitas);
-router.get('/cita/:id', authenticateJWTAll, CitaController.getCitaById);
-router.put('/cita/:id', authenticateJWTAll, CitaController.updateCita);
-router.delete('/cita/:id', authenticateJWTAll, CitaController.deleteCita);
+router.post('/cita', authenticateJWTMedRec, CitaController.createCita);
+router.get('/citas', authenticateJWTMedRec, CitaController.getAllCitas);
+router.get('/cita/:id', authenticateJWTMedRec, CitaController.getCitaById);
+router.put('/cita/:id', authenticateJWTMedRec, CitaController.updateCita);
+router.delete('/cita/:id', authenticateJWTMedRec, CitaController.deleteCita);
 
 //consultorios routes
 router.post(
@@ -123,55 +125,65 @@ router.delete(
 //custom routes
 router.get(
   '/evoluciones_historia/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   CustomController.getAllEvolucionesPorHistoria
 );
 // router.get('/confirm_user/:usuario/:contrasena', CustomController.confirmUser);
 // router.get(
 //   '/autocomplete',
-//   authenticateJWTMedAdm,
+//   authenticateJWTMedAdmin,
 //   CustomController.getAllPacientesAutocomplete
 // );
 router.get(
   '/cedula_paciente/:cedula',
-  authenticateJWTAll,
+  authenticateJWTMedRec,
   CustomController.getPacientesPorCedula
 );
 router.get(
   '/historia_paciente/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   CustomController.getHistoriaporIdPaciente
 );
 
 router.get(
   '/paciente_historia/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   CustomController.getPacienteporIdHistoria
 );
 router.get(
   '/evoluciones_autocomplete/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   CustomController.getEvolucionesAutocomplete
 );
 router.get(
   '/evoluciones_fecha/:id/:fecha1/:fecha2',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   CustomController.getEvolucionesPorFecha
 );
 router.get(
-  '/citas_fecha/:fecha1/:fecha2',
-  authenticateJWTAll,
+  '/citas_fechas/:fecha1/:fecha2',
+  authenticateJWTMedRec,
   CustomController.getCitasPorFecha
 );
 router.get(
+  '/citas_fechas_med/:fecha1/:fecha2/:id',
+  authenticateJWTMedRec,
+  CustomController.getCitasPorFechaMed
+);
+router.get(
   '/pacientes_buscar/:value',
-  authenticateJWTAll,
+  authenticateJWTMedRec,
   CustomController.getAllPacientesCedulaApellido
 );
 router.get(
   '/citas_fecha/:fecha',
-  authenticateJWTAll,
+  authenticateJWTMedRec,
   CustomController.getAllCitasFecha
+);
+router.get(
+  '/citas_fecha_med/:fecha/:id',
+  authenticateJWTMedRec,
+  CustomController.getAllCitasFechaMed
 );
 router.get(
   '/medicos_especialidades/:id',
@@ -180,7 +192,7 @@ router.get(
 );
 router.get(
   '/medicos_usuario/:id',
-  authenticateJWTAdmin,
+  authenticateJWTAll,
   CustomController.getMedicoPorUsuario
 );
 router.patch(
@@ -268,27 +280,27 @@ router.delete('/etnia/:id', authenticateJWTAdmin, EtniaController.deleteEtnia);
 //evoluciones routes
 router.post(
   '/evolucion',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   EvolucionController.createEvolucion
 );
 router.get(
   '/evoluciones',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   EvolucionController.getAllEvoluciones
 );
 router.get(
   '/evolucion/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   EvolucionController.getEvolucionById
 );
 router.put(
   '/evolucion/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   EvolucionController.updateEvolucion
 );
 router.delete(
   '/evolucion/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   EvolucionController.deleteEvolucion
 );
 
@@ -317,27 +329,27 @@ router.delete(
 //historias clinicas routes
 router.post(
   '/historia_clinica',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   HistoriaClinicaController.createHistoriaClinica
 );
 router.get(
   '/historias_clinicas',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   HistoriaClinicaController.getAllHistoriasClinicas
 );
 router.get(
   '/historia_clinica/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   HistoriaClinicaController.getHistoriaClinicaById
 );
 router.put(
   '/historia_clinica/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   HistoriaClinicaController.updateHistoriaClinica
 );
 router.delete(
   '/historia_clinica/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   HistoriaClinicaController.deleteHistoriaClinica
 );
 
@@ -369,25 +381,29 @@ router.delete(
 );
 
 //paciente routes
-router.post('/paciente', authenticateJWTAll, PacienteController.createPaciente);
+router.post(
+  '/paciente',
+  authenticateJWTMedRec,
+  PacienteController.createPaciente
+);
 router.get(
   '/pacientes',
-  authenticateJWTAll,
+  authenticateJWTMedRec,
   PacienteController.getAllPacientes
 );
 router.get(
   '/paciente/:id',
-  authenticateJWTAll,
+  authenticateJWTMedRec,
   PacienteController.getPacienteById
 );
 router.put(
   '/paciente/:id',
-  authenticateJWTAll,
+  authenticateJWTMedRec,
   PacienteController.updatePaciente
 );
 router.delete(
   '/paciente/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMed,
   PacienteController.deletePaciente
 );
 
@@ -406,12 +422,12 @@ router.post(
 );
 router.get(
   '/subcategorias',
-  authenticateJWTMedAdm,
+  authenticateJWTMedAdmin,
   SubcategoriaController.getAllSubcategorias
 );
 router.get(
   '/subcategoria/:id',
-  authenticateJWTMedAdm,
+  authenticateJWTMedAdmin,
   SubcategoriaController.getSubcategoriaById
 );
 router.put(

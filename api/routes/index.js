@@ -33,6 +33,7 @@ router.get('/', (req, res) => res.send('Welcome'));
 
 //authorization
 router.post('/confirm_user', AuthController.confirmUser);
+router.post('/recuperar_pass', CustomController.recuperarPass);
 
 //capitulos routes
 router.post(

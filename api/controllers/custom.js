@@ -7,6 +7,7 @@ const sequelizer = require('sequelize');
 const Op = sequelizer.Sequelize.Op;
 const mail = require('../nodemailer');
 const { sequelize } = require('../models');
+var generator = require('generate-password');
 
 const getAllEvolucionesPorHistoria = async (req, res) => {
   try {
@@ -25,62 +26,6 @@ const getAllEvolucionesPorHistoria = async (req, res) => {
   }
 };
 
-const confirmUser = async (req, res) => {
-  try {
-    let user = req.params.usuario;
-    let password = req.params.contrasena;
-    const usuario = await models.usuarios.findOne({
-      where: { usuario: user },
-      include: [
-        {
-          model: models.roles,
-          as: 'rol',
-        },
-      ],
-    });
-    if (usuario) {
-      const match = await bcrypt.compareSync(password, usuario.contrasena);
-      if (match) {
-        if (usuario.rol.rol.trim() === 'medico') {
-          const medico = await models.medicos.findOne({
-            where: { usuario_id: usuario.usuario_id },
-          });
-
-          return res.status(200).json({
-            data: {
-              isLoggedIn: true,
-              usuario: usuario.usuario,
-              rol: usuario.rol.rol,
-              nombre: usuario.nombre,
-              apellido: usuario.apellido,
-              cedula: usuario.cedula,
-              consultorio_id: usuario.consultorio_id,
-              medico_id: medico.medico_id,
-              especialidad: medico.especialidad,
-            },
-          });
-        } else {
-          return res.status(200).json({
-            data: {
-              isLoggedIn: true,
-              usuario: usuario.usuario,
-              rol: usuario.rol.rol,
-              nombre: usuario.nombre,
-              apellido: usuario.apellido,
-              cedula: usuario.cedula,
-              consultorio_id: usuario.consultorio_id,
-            },
-          });
-        }
-      }
-    } else {
-      return res.status(404).send('Password or username incorrect');
-    }
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send(error.message);
-  }
-};
 const getAllPacientesAutocomplete = async (req, res) => {
   try {
     const pacientes = await models.pacientes.findAll({
@@ -477,9 +422,56 @@ const getConsultoriosPorNombreyRuc = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+const recuperarPass = async (req, res) => {
+  try {
+    const username = req.body.usuario;
+    const usuario = await models.usuarios.findOne({
+      where: { usuario: username.trim() },
+    });
+
+    if (usuario) {
+      const contrasena = generator
+        .generate({
+          length: 6,
+          numbers: true,
+        })
+        .toUpperCase();
+      const user = {
+        usuario: usuario.usuario,
+        contrasena: contrasena,
+        rol_id: usuario.rol_id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+        fecha_nacimiento: usuario.fecha_nacimiento,
+        consultorio_id: usuario.consultorio_id,
+        cedula: usuario.cedula,
+        apellido: usuario.apellido,
+        telefono: usuario.telefono,
+        createdAt: usuario.createdAt,
+        updatedAt: new Date(),
+      };
+      const [updated] = await models.usuarios.update(user, {
+        where: { usuario_id: usuario.usuario_id },
+      });
+      console.log(updated, 'up', usuario.usuario_id);
+      if (updated) {
+        mail(usuario.email, contrasena);
+
+        return res.status(200).json({ data: true, email: usuario.email });
+      } else {
+        return res.status(200).json({ data: false });
+      }
+      // throw new Error('Not found');
+    } else {
+      return res.status(200).json({ data: false });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error.message);
+  }
+};
 module.exports = {
   getAllEvolucionesPorHistoria,
-  confirmUser,
   getAllPacientesAutocomplete,
   getPacientesPorCedula,
   getHistoriaporIdPaciente,
@@ -497,4 +489,5 @@ module.exports = {
   getConsultoriosPorNombreyRuc,
   getAllCitasFechaMed,
   getCitasPorFechaMed,
+  recuperarPass,
 };

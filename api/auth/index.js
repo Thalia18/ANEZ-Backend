@@ -59,9 +59,13 @@ const confirmUser = async (req, res) => {
             },
           });
         }
+      } else {
+        return res
+          .status(200)
+          .json({ error: 'Password or username incorrect' });
       }
     } else {
-      return res.status(404).json({ error: 'Password or username incorrect' });
+      return res.status(200).json({ error: 'Password or username incorrect' });
     }
   } catch (error) {
     return res.status(500).send(error.message);

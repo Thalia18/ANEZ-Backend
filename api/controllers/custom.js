@@ -6,9 +6,12 @@ const paginationCitas = require('../utils/pagination/paginateCitas');
 const sequelizer = require('sequelize');
 const Op = sequelizer.Sequelize.Op;
 const mail = require('../nodemailer');
+const mailCitas = require('../nodemailer/notificaciones');
+
 const { sequelize } = require('../models');
 var generator = require('generate-password');
 
+//recuperar evoluciones de acuerdo con el id de la historio clinica
 const getAllEvolucionesPorHistoria = async (req, res) => {
   try {
     const { id } = req.params;
@@ -26,21 +29,7 @@ const getAllEvolucionesPorHistoria = async (req, res) => {
   }
 };
 
-const getAllPacientesAutocomplete = async (req, res) => {
-  try {
-    const pacientes = await models.pacientes.findAll({
-      order: [['apellido', 'ASC']],
-      attributes: ['nombre', 'apellido', 'cedula'],
-    });
-    let data = pagination(req.query.page, pacientes);
-    return res.status(200).json({
-      data: data,
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
-
+//recuperar pacientes de acuerdo a su cedula o apellido-nombre
 const getAllPacientesCedulaApellido = async (req, res) => {
   var { value } = req.params;
   try {
@@ -80,6 +69,7 @@ const getAllPacientesCedulaApellido = async (req, res) => {
   }
 };
 
+//recuperar los pacientes de acuerdo a su cedula
 const getPacientesPorCedula = async (req, res) => {
   try {
     const { cedula } = req.params;
@@ -93,6 +83,8 @@ const getPacientesPorCedula = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar historias por id del paciente
 const getHistoriaporIdPaciente = async (req, res) => {
   try {
     const { id } = req.params;
@@ -106,6 +98,8 @@ const getHistoriaporIdPaciente = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar paciente de acuerdo a su historia clinica id
 const getPacienteporIdHistoria = async (req, res) => {
   try {
     const { id } = req.params;
@@ -127,20 +121,8 @@ const getPacienteporIdHistoria = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-const getEvolucionesAutocomplete = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const evoluciones = await models.evoluciones.findAll({
-      where: { historia_clinica_id: id },
-      attributes: ['evolucion_id', 'fecha', 'motivo_consulta', 'diagnostico'],
-    });
-    return res.status(200).json({
-      data: evoluciones,
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
+
+//recuperar todas las evoluciones por fecha
 const getEvolucionesPorFecha = async (req, res) => {
   try {
     const { id, fecha1, fecha2 } = req.params;
@@ -159,6 +141,8 @@ const getEvolucionesPorFecha = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar las citas entre 2 fechas
 const getCitasPorFecha = async (req, res) => {
   try {
     const { fecha1, fecha2 } = req.params;
@@ -185,6 +169,8 @@ const getCitasPorFecha = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar las citas por fecha - unicamente para medicos
 const getCitasPorFechaMed = async (req, res) => {
   try {
     const { fecha1, fecha2, id } = req.params;
@@ -220,6 +206,7 @@ const getCitasPorFechaMed = async (req, res) => {
   }
 };
 
+//recuperar citas para calendario
 const getAllCitasFecha = async (req, res) => {
   try {
     const { fecha } = req.params;
@@ -250,6 +237,8 @@ const getAllCitasFecha = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar las citas para calendario - unicamente para medicos
 const getAllCitasFechaMed = async (req, res) => {
   try {
     const { fecha, id } = req.params;
@@ -289,6 +278,43 @@ const getAllCitasFechaMed = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar todas las citas para las notificaciones
+const getAllCitasNotificacion = async (req, res) => {
+  try {
+    const { fecha } = req.params;
+    const actual = new Date();
+    var fechaF = fecha.split('-');
+    var year = fechaF[0];
+    var month = fechaF[1];
+    var day = fechaF[2];
+    var fecha1 = year + '-' + month + '-' + actual.getDate();
+    const citas = await models.citas.findAll({
+      where: { fecha: { [Op.gte]: fecha1 } },
+      order: [
+        ['fecha', 'ASC'],
+        ['hora', 'ASC'],
+      ],
+      include: [
+        {
+          model: models.pacientes,
+          attributes: ['nombre', 'apellido', 'cedula'],
+          as: 'pacientes',
+        },
+      ],
+    });
+    let data = paginationCitas(req.query.page, citas);
+
+    return res.status(200).json({
+      info: data.paginate,
+      data: data.result,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
+//recuperar todos los medicos de acuerdo a suu especialidad
 const getMedicoPorEspecialidades = async (req, res) => {
   try {
     const { id } = req.params;
@@ -307,6 +333,8 @@ const getMedicoPorEspecialidades = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar los medicos de acuerdo a su usuario id
 const getMedicoPorUsuario = async (req, res) => {
   try {
     const { id } = req.params;
@@ -324,6 +352,8 @@ const getMedicoPorUsuario = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//actualizar contraseña desde el admin
 const updateUsuarioPass = async (req, res) => {
   try {
     const { id, email } = req.params;
@@ -342,6 +372,8 @@ const updateUsuarioPass = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar medico por su usuario id
 const getMedicoPorUsuarioId = async (req, res) => {
   try {
     const { id } = req.params;
@@ -355,6 +387,8 @@ const getMedicoPorUsuarioId = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar usuarios por su nombre-apellido o usuario
 const getUsuariosPorApellidoNombreUsuario = async (req, res) => {
   var { value } = req.params;
   try {
@@ -393,6 +427,8 @@ const getUsuariosPorApellidoNombreUsuario = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//recuperar consultorios por su nombre o ruc
 const getConsultoriosPorNombreyRuc = async (req, res) => {
   var { value } = req.params;
   try {
@@ -422,6 +458,8 @@ const getConsultoriosPorNombreyRuc = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//cambiar contraseña olvidada
 const recuperarPass = async (req, res) => {
   try {
     const username = req.body.usuario;
@@ -461,7 +499,6 @@ const recuperarPass = async (req, res) => {
       } else {
         return res.status(200).json({ data: false });
       }
-      // throw new Error('Not found');
     } else {
       return res.status(200).json({ data: false });
     }
@@ -470,12 +507,88 @@ const recuperarPass = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+//enviar notificaciones de recordatorios
+const sendNotificacion = async (req, res) => {
+  try {
+    const { citas, direccion, telefono } = req.body;
+
+    for (const i of citas) {
+      console.log(i);
+      const cita = await models.citas.findOne({
+        where: { cita_id: i },
+        attributes: ['paciente_id', 'fecha', 'hora'],
+      });
+      const paciente = await models.pacientes.findOne({
+        where: { paciente_id: cita.paciente_id },
+        attributes: ['email', 'nombre', 'apellido'],
+      });
+      mailCitas(
+        paciente.email,
+        cita.fecha,
+        cita.hora,
+        `${paciente.nombre} ${paciente.apellido}`,
+        direccion,
+        telefono
+      );
+    }
+    return res.status(200).json({
+      data: 'success',
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error.message);
+  }
+};
+
+//recuperar usuario de acuerdo a su usuario
+const getUsuarioPorUsername = async (req, res) => {
+  try {
+    const { value } = req.params;
+    const usuario = await models.usuarios.findOne({
+      where: { usuario: value },
+      attributes: [
+        'nombre',
+        'apellido',
+        'fecha_nacimiento',
+        'cedula',
+        'usuario_id',
+        'email',
+        'telefono',
+        'usuario',
+      ],
+    });
+    return res.status(200).json({
+      data: usuario,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
+//actualizar email y telefono desde el perfil
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [updated] = await models.usuarios.update(req.body, {
+      where: { usuario_id: id },
+    });
+    if (updated) {
+      await models.usuarios.findOne({
+        where: { usuario_id: id },
+      });
+      return res.status(200).send('Updated');
+    }
+    throw new Error('Not found');
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 module.exports = {
   getAllEvolucionesPorHistoria,
-  getAllPacientesAutocomplete,
   getPacientesPorCedula,
   getHistoriaporIdPaciente,
-  getEvolucionesAutocomplete,
   getEvolucionesPorFecha,
   getPacienteporIdHistoria,
   getCitasPorFecha,
@@ -490,4 +603,8 @@ module.exports = {
   getAllCitasFechaMed,
   getCitasPorFechaMed,
   recuperarPass,
+  getAllCitasNotificacion,
+  sendNotificacion,
+  getUsuarioPorUsername,
+  updateUser,
 };

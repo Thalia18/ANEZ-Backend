@@ -43,9 +43,6 @@ const updateCategoria = async (req, res) => {
       where: { categoria_id: id },
     });
     if (updated) {
-      await models.categorias.findOne({
-        where: { categoria_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');

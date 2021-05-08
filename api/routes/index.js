@@ -231,6 +231,11 @@ router.patch(
   authenticateJWTAll,
   CustomController.updatePassPerfil
 );
+router.get(
+  '/cie10_sub/:value',
+  authenticateJWTAll,
+  CustomController.getCie10PorCodigoYDescripcion
+);
 
 //especialidades routes
 router.post(

@@ -44,9 +44,6 @@ const updateEspecialidad = async (req, res) => {
       where: { especialidad_id: id },
     });
     if (updated) {
-      await models.especialidades.findOne({
-        where: { especialidad_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');

@@ -50,9 +50,6 @@ const updateHistoriaClinica = async (req, res) => {
       where: { historia_clinica_id: id },
     });
     if (updated) {
-      await models.historias_clinicas.findOne({
-        where: { historia_clinica_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');

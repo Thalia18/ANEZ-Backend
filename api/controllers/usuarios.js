@@ -117,9 +117,6 @@ const updateUsuario = async (req, res) => {
         );
 
         if (updated) {
-          await models.usuarios.findOne({
-            where: { usuario_id: id },
-          });
           return res.status(200).json({
             data: {
               exist: false,
@@ -152,9 +149,6 @@ const updateUsuario = async (req, res) => {
       );
 
       if (updated) {
-        await models.usuarios.findOne({
-          where: { usuario_id: id },
-        });
         return res.status(200).json({
           data: {
             exist: false,

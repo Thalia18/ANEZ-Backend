@@ -39,9 +39,6 @@ const updateNivelDeInstruccion = async (req, res) => {
       where: { nivel_de_instruccion_id: id },
     });
     if (updated) {
-      await models.niveles_de_instruccion.findOne({
-        where: { nivel_de_instruccion_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');

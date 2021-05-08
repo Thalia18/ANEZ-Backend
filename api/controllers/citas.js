@@ -137,8 +137,6 @@ const updateCita = async (req, res) => {
         },
       ],
     });
-    console.log(cita_pac ? true : false);
-    console.log(cita_med ? true : false);
     if (cita_pac && !cita_med) {
       if (cita_pac.paciente_id.toString() !== req.body.paciente_id.toString()) {
         return res.status(200).json({ data: cita_pac });
@@ -147,9 +145,6 @@ const updateCita = async (req, res) => {
           where: { cita_id: id },
         });
         if (updated) {
-          await models.citas.findOne({
-            where: { cita_id: id },
-          });
           return res.status(200).send('Updated');
         }
         throw new Error('Not found');
@@ -159,9 +154,6 @@ const updateCita = async (req, res) => {
         where: { cita_id: id },
       });
       if (updated) {
-        await models.citas.findOne({
-          where: { cita_id: id },
-        });
         return res.status(200).send('Updated');
       }
       throw new Error('Not found');

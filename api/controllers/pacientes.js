@@ -81,9 +81,6 @@ const updatePaciente = async (req, res) => {
           where: { paciente_id: id },
         });
         if (updated) {
-          await models.pacientes.findOne({
-            where: { paciente_id: id },
-          });
           return res.status(200).json({
             data: {
               exist: false,
@@ -104,9 +101,6 @@ const updatePaciente = async (req, res) => {
         where: { paciente_id: id },
       });
       if (updated) {
-        await models.pacientes.findOne({
-          where: { paciente_id: id },
-        });
         return res.status(200).json({
           data: {
             exist: false,

@@ -361,9 +361,6 @@ const updateUsuarioPass = async (req, res) => {
       where: { usuario_id: id },
     });
     if (updated) {
-      await models.usuarios.findOne({
-        where: { usuario_id: id },
-      });
       mail(email, req.body.contrasena);
       return res.status(200).send('Updated');
     }
@@ -491,10 +488,8 @@ const recuperarPass = async (req, res) => {
       const [updated] = await models.usuarios.update(user, {
         where: { usuario_id: usuario.usuario_id },
       });
-      console.log(updated, 'up', usuario.usuario_id);
       if (updated) {
         mail(usuario.email, contrasena);
-
         return res.status(200).json({ data: true, email: usuario.email });
       } else {
         return res.status(200).json({ data: false });
@@ -574,9 +569,6 @@ const updateUser = async (req, res) => {
       where: { usuario_id: id },
     });
     if (updated) {
-      await models.usuarios.findOne({
-        where: { usuario_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');
@@ -598,17 +590,43 @@ const updatePassPerfil = async (req, res) => {
           where: { usuario_id: id },
         });
         if (updated) {
-          await models.usuarios.findOne({
-            where: { usuario_id: id },
-          });
-          return res.status(200).send('Updated');
+          return res.status(200).json({ success: true });
         }
       } catch (error) {
         return res.status(500).send(error.message);
       }
     } else {
-      return res.status(200).json({ pass: 'incorrect' });
+      return res.status(200).json({ success: false });
     }
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
+const getCie10PorCodigoYDescripcion = async (req, res) => {
+  var { value } = req.params;
+  try {
+    const cie10 = await models.subcategorias.findAll({
+      where: {
+        [Op.or]: [
+          {
+            codigo: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+          {
+            descripcion: {
+              [Op.iLike]: `%${value}%`,
+            },
+          },
+        ],
+      },
+      order: [['codigo', 'ASC']],
+      limit: 10,
+    });
+    return res.status(200).json({
+      data: cie10,
+    });
   } catch (error) {
     return res.status(500).send(error.message);
   }
@@ -636,4 +654,5 @@ module.exports = {
   getUsuarioPorUsername,
   updateUser,
   updatePassPerfil,
+  getCie10PorCodigoYDescripcion,
 };

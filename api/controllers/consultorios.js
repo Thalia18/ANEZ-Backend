@@ -69,9 +69,6 @@ const updateConsultorio = async (req, res) => {
           where: { consultorio_id: id },
         });
         if (updated) {
-          await models.consultorios.findOne({
-            where: { consultorio_id: id },
-          });
           return res.status(200).json({
             data: {
               exist: false,
@@ -90,9 +87,6 @@ const updateConsultorio = async (req, res) => {
         where: { consultorio_id: id },
       });
       if (updated) {
-        await models.consultorios.findOne({
-          where: { consultorio_id: id },
-        });
         return res.status(200).json({
           data: {
             exist: false,

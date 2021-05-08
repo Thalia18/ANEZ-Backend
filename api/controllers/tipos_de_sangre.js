@@ -39,9 +39,6 @@ const updateTipoDeSangre = async (req, res) => {
       where: { tipo_de_sangre_id: id },
     });
     if (updated) {
-      await models.tipos_de_sangre.findOne({
-        where: { tipo_de_sangre_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');

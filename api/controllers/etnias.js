@@ -39,9 +39,6 @@ const updateEtnia = async (req, res) => {
       where: { etnia_id: id },
     });
     if (updated) {
-      await models.etnias.findOne({
-        where: { etnia_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');

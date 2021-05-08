@@ -39,9 +39,6 @@ const updateGenero = async (req, res) => {
       where: { genero_id: id },
     });
     if (updated) {
-      await models.generos.findOne({
-        where: { genero_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');

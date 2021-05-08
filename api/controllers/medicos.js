@@ -46,9 +46,6 @@ const updateMedico = async (req, res) => {
       where: { medico_id: id },
     });
     if (updated) {
-      await models.medicos.findOne({
-        where: { medico_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');

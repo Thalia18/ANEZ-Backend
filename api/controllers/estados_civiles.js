@@ -39,9 +39,6 @@ const updateEstadoCivil = async (req, res) => {
       where: { estado_civil_id: id },
     });
     if (updated) {
-      await models.estados_civiles.findOne({
-        where: { estado_civil_id: id },
-      });
       return res.status(200).send('Updated');
     }
     throw new Error('Not found');

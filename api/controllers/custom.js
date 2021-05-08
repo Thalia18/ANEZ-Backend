@@ -562,7 +562,7 @@ const getUsuarioPorUsername = async (req, res) => {
       data: usuario,
     });
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send(error);
   }
 };
 
@@ -585,6 +585,34 @@ const updateUser = async (req, res) => {
   }
 };
 
+const updatePassPerfil = async (req, res) => {
+  try {
+    const { id, pass } = req.params;
+    const usuario = await models.usuarios.findOne({
+      where: { usuario_id: id },
+    });
+    const match = await bcrypt.compareSync(pass, usuario.contrasena);
+    if (match) {
+      try {
+        const [updated] = await models.usuarios.update(req.body, {
+          where: { usuario_id: id },
+        });
+        if (updated) {
+          await models.usuarios.findOne({
+            where: { usuario_id: id },
+          });
+          return res.status(200).send('Updated');
+        }
+      } catch (error) {
+        return res.status(500).send(error.message);
+      }
+    } else {
+      return res.status(200).json({ pass: 'incorrect' });
+    }
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
 module.exports = {
   getAllEvolucionesPorHistoria,
   getPacientesPorCedula,
@@ -607,4 +635,5 @@ module.exports = {
   sendNotificacion,
   getUsuarioPorUsername,
   updateUser,
+  updatePassPerfil,
 };

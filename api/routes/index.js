@@ -226,6 +226,11 @@ router.patch(
   authenticateJWTAll,
   CustomController.updateUser
 );
+router.patch(
+  '/usuario_update_pass/:id/:pass',
+  authenticateJWTAll,
+  CustomController.updatePassPerfil
+);
 
 //especialidades routes
 router.post(

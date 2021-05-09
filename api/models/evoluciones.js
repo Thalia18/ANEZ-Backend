@@ -35,7 +35,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       diagnostico: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
       diagnostico_cie10: {
         type: DataTypes.JSON,

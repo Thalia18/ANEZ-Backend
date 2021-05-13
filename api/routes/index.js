@@ -20,9 +20,8 @@ const UsuarioController = require('../controllers/usuarios');
 const AuthController = require('../auth');
 
 const {
-  authenticateJWTMedRec,
   authenticateJWTAdmin,
-  authenticateJWTMed,
+
   authenticateJWTAll,
   authenticateJWTMedAdmin,
 } = require('../auth/authenticate');

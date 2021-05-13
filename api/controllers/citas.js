@@ -49,14 +49,12 @@ const createCita = async (req, res) => {
       return res.status(201).send('Created');
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };
 const getAllCitas = async (req, res) => {
   try {
     const citas = await models.citas.findAll({
-      where: { fecha: { [Op.between]: [fecha1, fecha2] } },
       order: [
         ['fecha', 'ASC'],
         ['hora', 'ASC'],

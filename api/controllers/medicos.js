@@ -4,9 +4,8 @@ const pagination = require('../utils/pagination');
 const createMedico = async (req, res) => {
   try {
     await models.medicos.create(req.body);
-    return res.status(200).send('Created');
+    return res.status(201).send('Created');
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };

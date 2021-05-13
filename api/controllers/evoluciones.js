@@ -4,13 +4,12 @@ const pagination = require('../utils/pagination');
 const createEvolucion = async (req, res) => {
   try {
     const evolucion = await models.evoluciones.create(req.body);
-    return res.status(200).json({
+    return res.status(201).json({
       data: {
         evolucion_id: evolucion.evolucion_id,
       },
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };

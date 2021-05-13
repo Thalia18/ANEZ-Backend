@@ -509,7 +509,6 @@ const sendNotificacion = async (req, res) => {
     const { citas, direccion, telefono } = req.body;
 
     for (const i of citas) {
-      console.log(i);
       const cita = await models.citas.findOne({
         where: { cita_id: i },
         attributes: ['paciente_id', 'fecha', 'hora'],

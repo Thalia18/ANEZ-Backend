@@ -1,7 +1,7 @@
 const supertest = require('supertest');
 const app = require('../../index');
 const request = supertest(app);
-const { historia, historiaUp } = require('./mockups');
+const { historia, historiaUp } = require('./Mocks');
 
 let token = '';
 

@@ -1,7 +1,7 @@
 const supertest = require('supertest');
 const app = require('../../index');
 const request = supertest(app);
-const { pacienteUp, paciente } = require('./mockups');
+const { pacienteUp, paciente } = require('./Mocks');
 
 let token = '';
 

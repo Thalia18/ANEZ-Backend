@@ -235,6 +235,12 @@ router.get(
   authenticateJWTAll,
   CustomController.getCie10PorCodigoYDescripcion
 );
+router.get(
+  '/hc_buscar/:value',
+  authenticateJWTAll,
+  CustomController.getHCPorCedulaNombreHC
+);
+router.get('/historias', authenticateJWTAll, CustomController.getAllHistorias);
 
 //especialidades routes
 router.post(

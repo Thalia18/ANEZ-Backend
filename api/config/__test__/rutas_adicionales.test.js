@@ -203,6 +203,21 @@ describe('Adicionales Endpoint', () => {
     done();
   });
 
+  it('Obtiene todas las historias clínicas de acuerdo al nombre, apellido o cédula del paciente', async (done) => {
+    await request
+      .get('/api/hc_buscar/anez')
+      .set('Authorization', `${token}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
   it('Enviar recordatorios de citas', async (done) => {
     await request
       .post('/api/notificaciones')

@@ -14,7 +14,7 @@ async function main(to, fecha, hora, paciente, direccion, telefono) {
     secure: true, // true for 465, false for other ports
     auth: {
       user: 'estefa@anez-salud.com', // generated ethereal user
-      pass: 'haYmhQFuQy48', // generated ethereal password
+      pass: process.env.MAIL_PASS, // generated ethereal password
     },
   });
 

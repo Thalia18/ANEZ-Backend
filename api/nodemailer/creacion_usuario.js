@@ -1,5 +1,6 @@
 'use strict';
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 // async..await is not allowed in global scope, must use a wrapper
 async function main(to, pass, user) {
@@ -14,7 +15,7 @@ async function main(to, pass, user) {
     secure: true, // true for 465, false for other ports
     auth: {
       user: 'estefa@anez-salud.com', // generated ethereal user
-      pass: 'haYmhQFuQy48', // generated ethereal password
+      pass: process.env.MAIL_PASS, // generated ethereal password
     },
   });
 

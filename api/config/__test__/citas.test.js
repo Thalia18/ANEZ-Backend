@@ -4,6 +4,7 @@ const request = supertest(app);
 const { cita, citaUp } = require('./Mocks');
 
 let token = '';
+let refreshToken = '';
 
 describe('Citas Endpoint', () => {
   beforeAll(async (done) => {
@@ -20,6 +21,18 @@ describe('Citas Endpoint', () => {
           throw err;
         }
       });
+    await request
+      .post('/api/refresh_token')
+      .send({
+        headers: { Authorization: token },
+      })
+      .then((response, err) => {
+        if (response) {
+          refreshToken = response.body.refreshToken;
+        } else {
+          throw err;
+        }
+      });
     done();
   });
 
@@ -28,7 +41,7 @@ describe('Citas Endpoint', () => {
     await request
       .post('/api/cita')
       .send(cita)
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -44,7 +57,7 @@ describe('Citas Endpoint', () => {
   it('Obtiene todas las citas', async (done) => {
     await request
       .get('/api/citas')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -59,7 +72,7 @@ describe('Citas Endpoint', () => {
   it('Obtiene un cita por id', async (done) => {
     await request
       .get('/api/cita/4')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -73,8 +86,8 @@ describe('Citas Endpoint', () => {
 
   it('Elimina un cita por id', async (done) => {
     await request
-      .delete('/api/cita/7')
-      .set('Authorization', `${token}`)
+      .delete('/api/cita/15')
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -89,7 +102,7 @@ describe('Citas Endpoint', () => {
     await request
       .put('/api/cita/4')
       .send(citaUp)
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {

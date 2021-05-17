@@ -20,6 +20,18 @@ describe('Consultorios Endpoint', () => {
           throw err;
         }
       });
+    await request
+      .post('/api/refresh_token')
+      .send({
+        headers: { Authorization: token },
+      })
+      .then((response, err) => {
+        if (response) {
+          refreshToken = response.body.refreshToken;
+        } else {
+          throw err;
+        }
+      });
     done();
   });
 

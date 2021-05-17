@@ -21,7 +21,6 @@ const AuthController = require('../auth');
 
 const {
   authenticateJWTAdmin,
-
   authenticateJWTAll,
   authenticateJWTMedAdmin,
 } = require('../auth/authenticate');
@@ -32,6 +31,8 @@ router.get('/', (req, res) => res.send('Welcome'));
 
 //authorization
 router.post('/confirm_user', AuthController.confirmUser);
+router.post('/refresh_token', AuthController.refreshToken);
+
 router.post('/recuperar_pass', CustomController.recuperarPass);
 
 //capitulos routes

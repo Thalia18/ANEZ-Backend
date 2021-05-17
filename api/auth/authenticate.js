@@ -1,6 +1,6 @@
 const token = require('./index');
 const jwt = require('jsonwebtoken');
-const accessTokenSecret = token.accessTokenSecret;
+const refreshTokenSecret = token.refreshTokenSecret;
 
 module.exports = {
   authenticateJWTMedAdmin: function (req, res, next) {
@@ -8,7 +8,7 @@ module.exports = {
     const auth = req.headers.auth;
 
     if (authHeader) {
-      jwt.verify(authHeader, accessTokenSecret, (err, user) => {
+      jwt.verify(authHeader, refreshTokenSecret, (err, user) => {
         if (user) {
           switch (auth) {
           }
@@ -32,7 +32,7 @@ module.exports = {
     const auth = req.headers.auth;
 
     if (authHeader) {
-      jwt.verify(authHeader, accessTokenSecret, (err, user) => {
+      jwt.verify(authHeader, refreshTokenSecret, (err, user) => {
         if (user) {
           if (auth.trim() == 'ADMINISTRADOR') {
             req.user = user;
@@ -53,9 +53,8 @@ module.exports = {
   authenticateJWTAll: function (req, res, next) {
     const authHeader = req.headers.authorization;
     const auth = req.headers.auth;
-
     if (authHeader) {
-      jwt.verify(authHeader, accessTokenSecret, (err, user) => {
+      jwt.verify(authHeader, refreshTokenSecret, (err, user) => {
         if (user) {
           if (
             auth.trim() == 'MÉDICO' ||

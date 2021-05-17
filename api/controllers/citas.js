@@ -98,56 +98,24 @@ const getCitaById = async (req, res) => {
 
 const updateCita = async (req, res) => {
   const { id } = req.params;
+  const cita = await models.citas.findOne({
+    where: {
+      cita_id: id,
+    },
+    include: [
+      {
+        model: models.pacientes,
+        attributes: ['nombre', 'apellido', 'paciente_id'],
+        as: 'pacientes',
+      },
+      {
+        model: models.medicos,
+        as: 'medicos',
+      },
+    ],
+  });
   try {
-    const cita_pac = await models.citas.findOne({
-      where: {
-        paciente_id: req.body.paciente_id,
-        fecha: req.body.fecha,
-        hora: req.body.hora,
-      },
-      include: [
-        {
-          model: models.pacientes,
-          attributes: ['nombre', 'apellido', 'paciente_id'],
-          as: 'pacientes',
-        },
-        {
-          model: models.medicos,
-          as: 'medicos',
-        },
-      ],
-    });
-    const cita_med = await models.citas.findOne({
-      where: {
-        fecha: req.body.fecha,
-        hora: req.body.hora,
-        medico_id: req.body.medico_id,
-      },
-      include: [
-        {
-          model: models.pacientes,
-          attributes: ['nombre', 'apellido', 'paciente_id'],
-          as: 'pacientes',
-        },
-        {
-          model: models.medicos,
-          as: 'medicos',
-        },
-      ],
-    });
-    if (cita_pac && !cita_med) {
-      if (cita_pac.paciente_id.toString() !== req.body.paciente_id.toString()) {
-        return res.status(200).json({ data: cita_pac });
-      } else {
-        const [updated] = await models.citas.update(req.body, {
-          where: { cita_id: id },
-        });
-        if (updated) {
-          return res.status(200).send('Updated');
-        }
-        throw new Error('Not found');
-      }
-    } else if (!cita_pac && !cita_med) {
+    if (cita.fecha === req.body.fecha && cita.hora === req.body.hora) {
       const [updated] = await models.citas.update(req.body, {
         where: { cita_id: id },
       });
@@ -155,10 +123,71 @@ const updateCita = async (req, res) => {
         return res.status(200).send('Updated');
       }
       throw new Error('Not found');
-    } else if (!cita_pac && cita_med) {
-      return res.status(200).json({ data: cita_med });
     } else {
-      return res.status(200).json({ data: cita_pac });
+      const cita_pac = await models.citas.findOne({
+        where: {
+          paciente_id: req.body.paciente_id,
+          fecha: req.body.fecha,
+          hora: req.body.hora,
+        },
+        include: [
+          {
+            model: models.pacientes,
+            attributes: ['nombre', 'apellido', 'paciente_id'],
+            as: 'pacientes',
+          },
+          {
+            model: models.medicos,
+            as: 'medicos',
+          },
+        ],
+      });
+      const cita_med = await models.citas.findOne({
+        where: {
+          fecha: req.body.fecha,
+          hora: req.body.hora,
+          medico_id: req.body.medico_id,
+        },
+        include: [
+          {
+            model: models.pacientes,
+            attributes: ['nombre', 'apellido', 'paciente_id'],
+            as: 'pacientes',
+          },
+          {
+            model: models.medicos,
+            as: 'medicos',
+          },
+        ],
+      });
+
+      if (cita_pac && !cita_med) {
+        if (
+          cita_pac.paciente_id.toString() !== req.body.paciente_id.toString()
+        ) {
+          return res.status(200).json({ data: cita_pac });
+        } else {
+          const [updated] = await models.citas.update(req.body, {
+            where: { cita_id: id },
+          });
+          if (updated) {
+            return res.status(200).send('Updated');
+          }
+          throw new Error('Not found');
+        }
+      } else if (!cita_pac && !cita_med) {
+        const [updated] = await models.citas.update(req.body, {
+          where: { cita_id: id },
+        });
+        if (updated) {
+          return res.status(200).send('Updated');
+        }
+        throw new Error('Not found');
+      } else if (!cita_pac && cita_med) {
+        return res.status(200).json({ data: cita_med });
+      } else {
+        return res.status(200).json({ data: cita_pac });
+      }
     }
   } catch (error) {
     console.log(error);

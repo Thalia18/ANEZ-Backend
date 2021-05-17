@@ -4,6 +4,7 @@ const models = require('../models');
 var srs = require('secure-random-string');
 
 const accessTokenSecret = srs({ length: 256 });
+const refreshTokenSecret = srs({ length: 256 });
 
 const confirmUser = async (req, res) => {
   try {
@@ -24,7 +25,7 @@ const confirmUser = async (req, res) => {
         const accessToken = jwt.sign(
           { usuario: usuario.usuario, rol: usuario.rol.rol },
           accessTokenSecret,
-          { expiresIn: '15m' }
+          { expiresIn: '5m' }
         );
         if (usuario.rol.rol.trim() === 'MÉDICO') {
           const medico = await models.medicos.findOne({
@@ -72,7 +73,29 @@ const confirmUser = async (req, res) => {
   }
 };
 
+const refreshToken = (req, res) => {
+  const authHeader = req.body.headers.Authorization;
+
+  if (authHeader) {
+    jwt.verify(authHeader, accessTokenSecret, (err, success) => {
+      if (success) {
+        const refreshTokenS = jwt.sign({ loggedIn: true }, refreshTokenSecret, {
+          expiresIn: '24h',
+        });
+        return res.status(200).json({ refreshToken: refreshTokenS });
+      }
+      if (err) {
+        return res.json({ error: 'Forbidden' });
+      }
+    });
+  } else {
+    return res.json({ error: 'Unauthorized' });
+  }
+};
+
 module.exports = {
   confirmUser,
   accessTokenSecret,
+  refreshTokenSecret,
+  refreshToken,
 };

@@ -9,18 +9,18 @@ async function main(to, pass, user) {
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: 'smtp.zoho.com',
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: 'thaly18.98@gmail.com', // generated ethereal user
-      pass: 'eixjsmpnqyukgefi', // generated ethereal password
+      user: 'estefa@anez-salud.com', // generated ethereal user
+      pass: 'haYmhQFuQy48', // generated ethereal password
     },
   });
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Creación de usuario ANEZ 🏥 <thaly18.98@gmail.com>"', // sender address
+    from: '"Creación de usuario ANEZ 🏥 <estefa@anez-salud.com>"', // sender address
     to: to, // list of receivers
     subject: 'Nuevo usuario', // Subject line
     text: 'Nuevo usuario', // plain text body

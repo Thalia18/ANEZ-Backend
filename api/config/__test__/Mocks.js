@@ -1,9 +1,9 @@
 let cita = {
-  cita_id: 9,
+  cita_id: 15,
   medico_id: 3,
   paciente_id: 8,
-  fecha: '2021-05-20',
-  hora: '12:30:00',
+  fecha: '2021-06-20',
+  hora: '18:30:00',
   motivo_cita: 'Dolor muscular',
   telefono_paciente: '2524360',
   created_at: '2021-04-02T02:49:40.266Z',

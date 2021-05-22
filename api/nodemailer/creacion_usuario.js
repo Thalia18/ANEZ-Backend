@@ -25,7 +25,7 @@ async function main(to, pass, user) {
     to: to, // list of receivers
     subject: 'Nuevo usuario', // Subject line
     text: 'Nuevo usuario', // plain text body
-    html: `<b>Nueva usuario</b> <p>Su usuario es: <b>${user}</b> </p><p>Su contraseña es: <b>${pass}</b> </p> `, // html body
+    html: `<b>Nuevo usuario</b> <p>Su usuario es: <b>${user}</b> </p><p>Su contraseña es: <b>${pass}</b> </p> `, // html body
   });
 
   console.log('Message sent: %s', info.messageId);

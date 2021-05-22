@@ -4,13 +4,14 @@ const request = supertest(app);
 const { usuario, usuarioUp } = require('./Mocks');
 
 let token = '';
+let refreshToken = '';
 
-describe('Usuario Endpoint', () => {
+describe('Usuarios', () => {
   beforeAll(async (done) => {
     await request
       .post('/api/confirm_user')
       .send({
-        usuario: 'A1',
+        usuario: 'THZAPATA847',
         contrasena: 'Thalia18',
       })
       .then((response, err) => {
@@ -36,11 +37,11 @@ describe('Usuario Endpoint', () => {
   });
 
   // para pasar la prueba necesita cumplir con la condicion de unique cedula y unique usuario
-  it('Crea un nuevo usuario', async (done) => {
+  it('/usuario', async (done) => {
     await request
       .post('/api/usuario')
       .send(usuario)
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -53,10 +54,10 @@ describe('Usuario Endpoint', () => {
     done();
   });
 
-  it('Obtiene todos los usuarios', async (done) => {
+  it('/usuarios', async (done) => {
     await request
       .get('/api/usuarios')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -68,10 +69,10 @@ describe('Usuario Endpoint', () => {
     done();
   });
 
-  it('Obtiene un usuario por id', async (done) => {
+  it('/usuario/:id', async (done) => {
     await request
-      .get('/api/usuario/100')
-      .set('Authorization', `${token}`)
+      .get('/api/usuario/1')
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -83,29 +84,61 @@ describe('Usuario Endpoint', () => {
     done();
   });
 
-  it('Elimina un usuario por id', async (done) => {
+  it('/usuarios_buscar/:value', async (done) => {
     await request
-      .delete('/api/usuario/102')
-      .set('Authorization', `${token}`)
+      .get('/api/usuarios_buscar/zapata')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/usuario/:id', async (done) => {
+    await request
+      .patch('/api/usuario/1')
+      .send(usuarioUp)
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/usuario_update_pass/:id/:value', async (done) => {
+    await request
+      .patch('/api/usuario_update_pass/1/a')
+      .send(usuarioUp)
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/usuario/:id', async (done) => {
+    await request
+      .delete('/api/usuario/19')
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
           expect(response.statusCode).toBe(204);
-        } else {
-          throw err;
-        }
-      });
-    done();
-  });
-  it('Edita un usuario', async (done) => {
-    await request
-      .patch('/api/usuario/100')
-      .send(usuarioUp)
-      .set('Authorization', `${token}`)
-      .set('auth', 'ADMINISTRADOR')
-      .then((response, err) => {
-        if (response) {
-          expect(response.statusCode).toBe(200);
         } else {
           throw err;
         }

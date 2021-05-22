@@ -4,8 +4,9 @@ const request = supertest(app);
 const { historia, historiaUp } = require('./Mocks');
 
 let token = '';
+let refreshToken = '';
 
-describe('Historias clínicas Endpoint', () => {
+describe('Historias clínicas', () => {
   beforeAll(async (done) => {
     await request
       .post('/api/confirm_user')
@@ -36,11 +37,11 @@ describe('Historias clínicas Endpoint', () => {
   });
 
   // para pasar la prueba necesita cumplir con la condicion de unique historia por paciente
-  it('Crea un nueva historia clínica', async (done) => {
+  it('/historia_clinica', async (done) => {
     await request
       .post('/api/historia_clinica')
       .send(historia)
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -53,10 +54,10 @@ describe('Historias clínicas Endpoint', () => {
     done();
   });
 
-  it('Obtiene todas las historias clínicas', async (done) => {
+  it('/historias_clinicas', async (done) => {
     await request
       .get('/api/historias_clinicas')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -68,10 +69,10 @@ describe('Historias clínicas Endpoint', () => {
     done();
   });
 
-  it('Obtiene una historia clínica por id', async (done) => {
+  it('/historia_clinica/:id', async (done) => {
     await request
       .get('/api/historia_clinica/1')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -83,29 +84,60 @@ describe('Historias clínicas Endpoint', () => {
     done();
   });
 
-  it('Elimina una historia clínica por id', async (done) => {
+  it('/hc_buscar/:value', async (done) => {
+    await request
+      .get('/api/hc_buscar/a')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/paciente_historia/:id', async (done) => {
+    await request
+      .get('/api/paciente_historia/1')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/historia_clinica/:id', async (done) => {
+    await request
+      .put('/api/historia_clinica/1')
+      .send(historiaUp)
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/historia_clinica/:id', async (done) => {
     await request
       .delete('/api/historia_clinica/6')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
           expect(response.statusCode).toBe(204);
-        } else {
-          throw err;
-        }
-      });
-    done();
-  });
-  it('Edita una historia clínica', async (done) => {
-    await request
-      .put('/api/historia_clinica/1')
-      .send(historiaUp)
-      .set('Authorization', `${token}`)
-      .set('auth', 'ADMINISTRADOR')
-      .then((response, err) => {
-        if (response) {
-          expect(response.statusCode).toBe(200);
         } else {
           throw err;
         }

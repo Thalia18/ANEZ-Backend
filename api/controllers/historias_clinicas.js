@@ -16,8 +16,10 @@ const getAllHistoriasClinicas = async (req, res) => {
         {
           model: models.pacientes,
           as: 'pacientes',
+          attributes: ['nombre', 'apellido'],
         },
       ],
+      attributes: ['paciente_id', 'historia_clinica_id'],
     });
     let data = pagination(req.query.page, historiasClinicas);
     return res.status(200).json({

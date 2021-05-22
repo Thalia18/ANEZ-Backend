@@ -1,17 +1,17 @@
 let cita = {
-  cita_id: 15,
-  medico_id: 3,
-  paciente_id: 8,
-  fecha: '2021-06-20',
-  hora: '18:30:00',
+  cita_id: 10,
+  medico_id: 6,
+  paciente_id: 7,
+  fecha: '2021-07-23',
+  hora: '17:30:00',
   motivo_cita: 'Dolor muscular',
   telefono_paciente: '2524360',
   created_at: '2021-04-02T02:49:40.266Z',
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let citaUp = {
-  medico_id: 3,
-  paciente_id: 8,
+  medico_id: 6,
+  paciente_id: 7,
   fecha: '2021-05-20',
   hora: '15:50:00',
   motivo_cita: 'Dolor muscular',
@@ -39,8 +39,8 @@ let consultorioUp = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let evolucion = {
-  evolucion_id: 3,
-  historia_clinica_id: 8,
+  evolucion_id: 9,
+  historia_clinica_id: 18,
   fecha: '2020-05-02',
   motivo_consulta: 'dolor adbominal',
   fecha_ultima_menstruacion: '2020-04-20',
@@ -55,7 +55,7 @@ let evolucion = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let evolucionUp = {
-  historia_clinica_id: 8,
+  historia_clinica_id: 18,
   fecha: '2020-05-02',
   motivo_consulta: 'dolor adbominal',
   fecha_ultima_menstruacion: '2020-04-20',
@@ -70,8 +70,7 @@ let evolucionUp = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let historia = {
-  historia_clinica_id: 8,
-  paciente_id: 7,
+  paciente_id: 12,
   antecedente_patologico_personal: 'diabetes',
   antecedente_quirurgico: 'ninguno',
   alergia: 'ninguna',
@@ -84,7 +83,7 @@ let historia = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let historiaUp = {
-  paciente_id: 8,
+  paciente_id: 18,
   antecedente_patologico_personal: 'diabetes',
   antecedente_quirurgico: 'ninguno',
   alergia: 'ninguna',
@@ -97,14 +96,14 @@ let historiaUp = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let paciente = {
-  paciente_id: 8,
+  paciente_id: 18,
   tipo_de_sangre_id: 1,
   etnia_id: 1,
   nivel_de_instruccion_id: 1,
   estado_civil_id: 1,
   nombre: 'Andrea',
   apellido: 'Fernandez',
-  cedula: '000000007',
+  cedula: '600000011',
   fecha_nacimiento: '1992-11-25',
   lugar_nacimiento: 'Quito ',
   direccion: 'Nueva Floresta',
@@ -136,12 +135,11 @@ let pacienteUp = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let usuario = {
-  usuario_id: 103,
   consultorio_id: 1,
   rol_id: 1,
-  usuario: 'Andrea3',
+  usuario: 'Andrea14',
   contrasena: '123',
-  cedula: '000000003',
+  cedula: '100000228',
   nombre: 'Thalia',
   apellido: 'Zapata',
   telefono: '2524360',
@@ -178,7 +176,7 @@ let medicoUp = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let citasNot = {
-  citas: [4, 8],
+  citas: [1, 2],
   direccion: 'Quito',
   telefono: '3444440',
 };

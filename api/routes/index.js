@@ -227,7 +227,7 @@ router.patch(
   CustomController.updateUser
 );
 router.patch(
-  '/usuario_update_pass/:id/:pass',
+  '/usuario_update_pass/:id/:value',
   authenticateJWTAll,
   CustomController.updatePassPerfil
 );

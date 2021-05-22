@@ -1,12 +1,12 @@
 const supertest = require('supertest');
 const app = require('../../index');
 const request = supertest(app);
-const { cita, citaUp } = require('./Mocks');
+const { cita, citaUp, citasNot } = require('./Mocks');
 
 let token = '';
 let refreshToken = '';
 
-describe('Citas Endpoint', () => {
+describe('Citas', () => {
   beforeAll(async (done) => {
     await request
       .post('/api/confirm_user')
@@ -37,7 +37,7 @@ describe('Citas Endpoint', () => {
   });
 
   // para pasar la prueba necesita cumplir con la condicion de unique hora por paciente y medico
-  it('Crea un nueva cita', async (done) => {
+  it('/cita', async (done) => {
     await request
       .post('/api/cita')
       .send(cita)
@@ -54,7 +54,23 @@ describe('Citas Endpoint', () => {
     done();
   });
 
-  it('Obtiene todas las citas', async (done) => {
+  it('/notificaciones', async (done) => {
+    await request
+      .post('/api/notificaciones')
+      .send(citasNot)
+      .set('Authorization', `${token}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/citas', async (done) => {
     await request
       .get('/api/citas')
       .set('Authorization', `${refreshToken}`)
@@ -69,9 +85,9 @@ describe('Citas Endpoint', () => {
     done();
   });
 
-  it('Obtiene un cita por id', async (done) => {
+  it('/cita/:id', async (done) => {
     await request
-      .get('/api/cita/4')
+      .get('/api/cita/1')
       .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
@@ -84,29 +100,60 @@ describe('Citas Endpoint', () => {
     done();
   });
 
-  it('Elimina un cita por id', async (done) => {
+  it('/citas_fecha/:fecha1/:fecha2', async (done) => {
     await request
-      .delete('/api/cita/15')
+      .get('/api/citas_fechas/2020-01-01/2020-02-01')
       .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
-          expect(response.statusCode).toBe(204);
+          expect(response.statusCode).toBe(200);
         } else {
           throw err;
         }
       });
     done();
   });
-  it('Edita un cita', async (done) => {
+
+  it('/citas_fechas_med/:fecha1/:fecha2/:id', async (done) => {
     await request
-      .put('/api/cita/4')
+      .get('/api/citas_fechas_med/2020-01-01/2020-02-01/3')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/cita/:id', async (done) => {
+    await request
+      .put('/api/cita/1')
       .send(citaUp)
       .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
           expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/cita/:id', async (done) => {
+    await request
+      .delete('/api/cita/9')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(204);
         } else {
           throw err;
         }

@@ -578,11 +578,11 @@ const updateUser = async (req, res) => {
 
 const updatePassPerfil = async (req, res) => {
   try {
-    const { id, pass } = req.params;
+    const { id, value } = req.params;
     const usuario = await models.usuarios.findOne({
       where: { usuario_id: id },
     });
-    const match = await bcrypt.compareSync(pass, usuario.contrasena);
+    const match = await bcrypt.compareSync(value, usuario.contrasena);
     if (match) {
       try {
         const [updated] = await models.usuarios.update(req.body, {
@@ -669,7 +669,6 @@ const getAllHistorias = async (req, res) => {
       data: data.result,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error.message);
   }
 };

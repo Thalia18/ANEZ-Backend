@@ -4,8 +4,8 @@ const request = supertest(app);
 const { evolucion, evolucionUp } = require('./Mocks');
 
 let token = '';
-
-describe('Evoluciones Endpoint', () => {
+let refreshToken = '';
+describe('Evoluciones', () => {
   beforeAll(async (done) => {
     await request
       .post('/api/confirm_user')
@@ -35,11 +35,11 @@ describe('Evoluciones Endpoint', () => {
     done();
   });
 
-  it('Crea un nueva evolucion', async (done) => {
+  it('/evolucion', async (done) => {
     await request
       .post('/api/evolucion')
       .send(evolucion)
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -52,10 +52,10 @@ describe('Evoluciones Endpoint', () => {
     done();
   });
 
-  it('Obtiene todas las evoluciones', async (done) => {
+  it('/evoluciones', async (done) => {
     await request
       .get('/api/evoluciones')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -67,10 +67,10 @@ describe('Evoluciones Endpoint', () => {
     done();
   });
 
-  it('Obtiene una evolucion por id', async (done) => {
+  it('/evolucion/:id', async (done) => {
     await request
       .get('/api/evolucion/1')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -82,29 +82,60 @@ describe('Evoluciones Endpoint', () => {
     done();
   });
 
-  it('Elimina una evolucion por id', async (done) => {
+  it('/evoluciones_fecha/:id/:fecha1/:fecha2', async (done) => {
     await request
-      .delete('/api/evolucion/2')
-      .set('Authorization', `${token}`)
+      .get('/api/evoluciones_fecha/8/2020-01-01/2020-02-01')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/cie10_sub/:value', async (done) => {
+    await request
+      .get('/api/cie10_sub/A0')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/evolucion/:id ', async (done) => {
+    await request
+      .put('/api/evolucion/1')
+      .send(evolucionUp)
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/evolucion/:id', async (done) => {
+    await request
+      .delete('/api/evolucion/6')
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
           expect(response.statusCode).toBe(204);
-        } else {
-          throw err;
-        }
-      });
-    done();
-  });
-  it('Edita una evolucion ', async (done) => {
-    await request
-      .put('/api/evolucion/1')
-      .send(evolucionUp)
-      .set('Authorization', `${token}`)
-      .set('auth', 'ADMINISTRADOR')
-      .then((response, err) => {
-        if (response) {
-          expect(response.statusCode).toBe(200);
         } else {
           throw err;
         }

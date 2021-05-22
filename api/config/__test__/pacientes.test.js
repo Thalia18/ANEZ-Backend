@@ -4,8 +4,9 @@ const request = supertest(app);
 const { pacienteUp, paciente } = require('./Mocks');
 
 let token = '';
+let refreshToken = '';
 
-describe('Pacientes Endpoint', () => {
+describe('Pacientes', () => {
   beforeAll(async (done) => {
     await request
       .post('/api/confirm_user')
@@ -36,11 +37,11 @@ describe('Pacientes Endpoint', () => {
   });
 
   // // para pasar la prueba necesita cumplir con la condicion de unique cedula
-  it('Crea un nuevo paciente', async (done) => {
+  it('/paciente', async (done) => {
     await request
       .post('/api/paciente')
       .send(paciente)
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -53,10 +54,10 @@ describe('Pacientes Endpoint', () => {
     done();
   });
 
-  it('Obtiene todos los pacientes', async (done) => {
+  it('/pacientes', async (done) => {
     await request
       .get('/api/pacientes')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -68,10 +69,10 @@ describe('Pacientes Endpoint', () => {
     done();
   });
 
-  it('Obtiene un paciente por id', async (done) => {
+  it('/paciente/:id', async (done) => {
     await request
       .get('/api/paciente/2')
-      .set('Authorization', `${token}`)
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
@@ -83,29 +84,45 @@ describe('Pacientes Endpoint', () => {
     done();
   });
 
-  it('Elimina un paciente por id', async (done) => {
+  it('/pacientes_buscar/:value', async (done) => {
     await request
-      .delete('/api/paciente/5')
-      .set('Authorization', `${token}`)
+      .get('/api/pacientes_buscar/0000')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/paciente/:id', async (done) => {
+    await request
+      .put('/api/paciente/2')
+      .send(pacienteUp)
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/paciente/:id', async (done) => {
+    await request
+      .delete('/api/paciente/17')
+      .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
         if (response) {
           expect(response.statusCode).toBe(204);
-        } else {
-          throw err;
-        }
-      });
-    done();
-  });
-  it('Edita un paciente', async (done) => {
-    await request
-      .put('/api/paciente/2')
-      .send(pacienteUp)
-      .set('Authorization', `${token}`)
-      .set('auth', 'ADMINISTRADOR')
-      .then((response, err) => {
-        if (response) {
-          expect(response.statusCode).toBe(200);
         } else {
           throw err;
         }

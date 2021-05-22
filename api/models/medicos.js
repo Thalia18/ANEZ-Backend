@@ -62,7 +62,7 @@ module.exports = function (sequelize, DataTypes) {
     });
 
     Medicos.belongsTo(models.usuarios, {
-      foreignKey: 'medico_id',
+      foreignKey: 'usuario_id',
       as: 'usuario',
     });
   };

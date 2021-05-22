@@ -157,7 +157,6 @@ const updateUsuario = async (req, res) => {
       } else throw new Error('Not found');
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error.message);
   }
 };

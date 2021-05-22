@@ -238,10 +238,19 @@ router.get(
 );
 router.get(
   '/hc_buscar/:value',
-  authenticateJWTAll,
+  authenticateJWTMedAdmin,
   CustomController.getHCPorCedulaNombreHC
 );
-router.get('/historias', authenticateJWTAll, CustomController.getAllHistorias);
+router.get(
+  '/historias',
+  authenticateJWTMedAdmin,
+  CustomController.getAllHistorias
+);
+router.get(
+  '/medicos_buscar/:value',
+  authenticateJWTAdmin,
+  CustomController.getMedicosPorCedulaNombre
+);
 
 //especialidades routes
 router.post(

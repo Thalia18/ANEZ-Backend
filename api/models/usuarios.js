@@ -119,7 +119,7 @@ module.exports = function (sequelize, DataTypes) {
   );
   Usuarios.associate = function (models) {
     Usuarios.hasMany(models.medicos, {
-      foreignKey: 'medico_id',
+      foreignKey: 'usuario_id',
     });
     Usuarios.belongsTo(models.roles, {
       foreignKey: 'rol_id',

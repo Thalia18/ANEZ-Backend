@@ -673,6 +673,28 @@ const getAllHistorias = async (req, res) => {
   }
 };
 
+const getMedicosPorCedulaNombre = async (req, res) => {
+  var { value } = req.params;
+  try {
+    const medicos = await sequelize.query(
+      `select * from medicos join usuarios on usuarios.usuario_id = medicos.usuario_id 
+      where (apellido ilike '%${value}%' or nombre ilike '%${value}%'  or cedula ilike '%${value}%') 
+        order by apellido asc, nombre asc`,
+      {
+        model: models.usuarios,
+        mapToModel: true,
+      }
+    );
+    let data = pagination(req.query.page, medicos);
+    return res.status(200).json({
+      info: data.paginate,
+      data: data.result,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 module.exports = {
   getAllEvolucionesPorHistoria,
   getPacientesPorCedula,
@@ -699,4 +721,5 @@ module.exports = {
   getCie10PorCodigoYDescripcion,
   getHCPorCedulaNombreHC,
   getAllHistorias,
+  getMedicosPorCedulaNombre,
 };

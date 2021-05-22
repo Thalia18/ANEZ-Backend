@@ -137,9 +137,9 @@ let pacienteUp = {
 let usuario = {
   consultorio_id: 1,
   rol_id: 1,
-  usuario: 'Andrea14',
+  usuario: 'Andrea16',
   contrasena: '123',
-  cedula: '100000228',
+  cedula: '100000528',
   nombre: 'Thalia',
   apellido: 'Zapata',
   telefono: '2524360',
@@ -163,14 +163,13 @@ let usuarioUp = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let medico = {
-  medico_id: 102,
-  usuario_id: 103,
+  usuario_id: 23,
   especialidad: {},
   created_at: '2021-04-02T02:49:40.266Z',
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let medicoUp = {
-  usuario_id: 100,
+  usuario_id: 23,
   especialidad: {},
   created_at: '2021-04-02T02:49:40.266Z',
   updated_at: '2021-04-02T02:49:40.266Z',

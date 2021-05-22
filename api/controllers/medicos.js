@@ -3,15 +3,21 @@ const pagination = require('../utils/pagination');
 
 const createMedico = async (req, res) => {
   try {
-    await models.medicos.create(req.body);
-    return res.status(201).send('Created');
+    const medico = await models.medicos.create(req.body);
+    return res.status(201).json({
+      data: {
+        medico_id: medico.medico_id,
+      },
+    });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 const getAllMedicos = async (req, res) => {
   try {
-    const medicos = await models.medicos.findAll();
+    const medicos = await models.medicos.findAll({
+      include: [{ model: models.usuarios, as: 'usuario' }],
+    });
     let data = pagination(req.query.page, medicos);
     return res.status(200).json({
       info: data.paginate,

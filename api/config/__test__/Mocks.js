@@ -20,8 +20,7 @@ let citaUp = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let consultorio = {
-  consultorio_id: 4,
-  nombre: 'ANEZ 3',
+  nombre: 'ANEZEE',
   ruc: '0000000001',
   direccion: 'Quito',
   logo: 'anez.png',
@@ -30,7 +29,7 @@ let consultorio = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let consultorioUp = {
-  nombre: 'ANEZ',
+  nombre: 'ANEZ e',
   ruc: '0000000001',
   direccion: 'Quito',
   logo: 'anez.png',
@@ -163,13 +162,13 @@ let usuarioUp = {
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let medico = {
-  usuario_id: 23,
+  usuario_id: 44,
   especialidad: {},
   created_at: '2021-04-02T02:49:40.266Z',
   updated_at: '2021-04-02T02:49:40.266Z',
 };
 let medicoUp = {
-  usuario_id: 23,
+  usuario_id: 44,
   especialidad: {},
   created_at: '2021-04-02T02:49:40.266Z',
   updated_at: '2021-04-02T02:49:40.266Z',

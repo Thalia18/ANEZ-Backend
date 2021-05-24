@@ -54,9 +54,9 @@ describe('Médicos', () => {
     done();
   });
 
-  it('/medicos_usuario/:id', async (done) => {
+  it('/medicos', async (done) => {
     await request
-      .get('/api/medicos_usuario/23')
+      .get('/api/medicos')
       .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {
@@ -71,7 +71,37 @@ describe('Médicos', () => {
 
   it('/medico/:id', async (done) => {
     await request
-      .put('/api/medico/6')
+      .get('/api/medico/47')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/medicos_buscar/:value', async (done) => {
+    await request
+      .get('/api/medicos_buscar/a')
+      .set('Authorization', `${refreshToken}`)
+      .set('auth', 'ADMINISTRADOR')
+      .then((response, err) => {
+        if (response) {
+          expect(response.statusCode).toBe(200);
+        } else {
+          throw err;
+        }
+      });
+    done();
+  });
+
+  it('/medico/:id', async (done) => {
+    await request
+      .put('/api/medico/47')
       .send(medicoUp)
       .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
@@ -87,7 +117,7 @@ describe('Médicos', () => {
 
   it('/medico/:id', async (done) => {
     await request
-      .delete('/api/medico/7')
+      .delete('/api/medico/48')
       .set('Authorization', `${refreshToken}`)
       .set('auth', 'ADMINISTRADOR')
       .then((response, err) => {

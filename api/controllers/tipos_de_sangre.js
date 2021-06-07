@@ -10,7 +10,9 @@ const createTipoDeSangre = async (req, res) => {
 };
 const getAllTiposDeSangre = async (req, res) => {
   try {
-    const tiposDeSangre = await models.tipos_de_sangre.findAll();
+    const tiposDeSangre = await models.tipos_de_sangre.findAll({
+      offset: 1,
+    });
     return res.status(200).json({ data: tiposDeSangre });
   } catch (error) {
     return res.status(500).send(error.message);

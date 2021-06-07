@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
       },
       tipo_de_sangre: {
-        type: DataTypes.CHAR(3),
+        type: DataTypes.CHAR(12),
         allowNull: false,
       },
       createdAt: {

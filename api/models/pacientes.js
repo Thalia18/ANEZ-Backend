@@ -59,12 +59,12 @@ module.exports = function (sequelize, DataTypes) {
       },
       cedula: {
         type: DataTypes.CHAR(15),
-        allowNull: false,
+        allowNull: true,
         unique: 'unique_cedula',
       },
       fecha_nacimiento: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
       },
       lugar_nacimiento: {
         type: DataTypes.CHAR(50),
@@ -80,7 +80,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       email: {
         type: DataTypes.CHAR(250),
-        allowNull: false,
+        allowNull: true,
       },
       contacto_emergencia_nombre: {
         type: DataTypes.CHAR(100),

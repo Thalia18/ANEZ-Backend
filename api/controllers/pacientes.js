@@ -7,21 +7,22 @@ const createPaciente = async (req, res) => {
       where: { cedula: req.body.cedula },
     });
     if (paciente !== null) {
-      console.log('object');
       return res.status(200).json({
         data: {
           exist: true,
         },
       });
     } else {
-      await models.pacientes.create(req.body);
+      const newp = await models.pacientes.create(req.body);
       return res.status(201).json({
         data: {
           exist: false,
+          paciente_id: newp.paciente_id,
         },
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };

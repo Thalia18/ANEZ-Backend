@@ -298,7 +298,7 @@ const getAllCitasNotificacion = async (req, res) => {
       include: [
         {
           model: models.pacientes,
-          attributes: ['nombre', 'apellido', 'cedula'],
+          attributes: ['nombre', 'apellido', 'cedula', 'email'],
           as: 'pacientes',
         },
       ],
@@ -498,7 +498,6 @@ const recuperarPass = async (req, res) => {
       return res.status(200).json({ data: false });
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error.message);
   }
 };
@@ -517,6 +516,7 @@ const sendNotificacion = async (req, res) => {
         where: { paciente_id: cita.paciente_id },
         attributes: ['email', 'nombre', 'apellido'],
       });
+
       mailCitas(
         paciente.email,
         cita.fecha,
@@ -525,12 +525,19 @@ const sendNotificacion = async (req, res) => {
         direccion,
         telefono
       );
+      return res.status(200).json({
+        data: 'success',
+      });
+
+      // client.messages
+      //   .create({
+      //     from: 'whatsapp:+19289705763',
+      //     body: 'Ahoy world!',
+      //     to: 'whatsapp:+593998203281',
+      //   })
+      //   .then((message) => console.log(message.sid));
     }
-    return res.status(200).json({
-      data: 'success',
-    });
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error.message);
   }
 };

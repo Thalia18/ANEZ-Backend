@@ -25,7 +25,16 @@ async function main(to, pass, user) {
     to: to, // list of receivers
     subject: 'Nuevo usuario', // Subject line
     text: 'Nuevo usuario', // plain text body
-    html: `<b>Nuevo usuario</b> <p>Su usuario es: <b>${user}</b> </p><p>Su contraseña es: <b>${pass}</b> </p> `, // html body
+    html: `
+    <div style="text-align: center;"> 
+    <img src= "https://i.ibb.co/hLjvrdL/logoANEZ.png width="160" height="150" ><br/><h2>Centro médico ANEZ </h2>
+    </div><br/><br/> <br/><br/>  <br/><br/> 
+    <h3><b>Nuevo usuario</b></h3><br/>
+    <p>Estimado/a usuario/a, su usuario y contraseña de acceso al sitio web <a>https://www.anez-salud.com</a> son:</p>
+    <p>Usuario: <b>${user}</b></p>
+    <p>Contraseña: <b>${pass}</b></p>
+    <p>Puede cambiar su contraseña desde la opción Perfil.</p><br/><br/><br/><br/>
+    <footer style="text-align: center;"><b>Dirección:</b> Av. Orellana y Av. 6 de Diciembre &nbsp;&nbsp;&nbsp; <b>Teléfono:</b> 0995363193</footer> `, // html body
   });
 
   console.log('Message sent: %s', info.messageId);

@@ -24,7 +24,16 @@ async function main(to, fecha, hora, paciente, direccion, telefono) {
     to: to, // list of receivers
     subject: 'Recordatorio de cita', // Subject line
     text: 'ANEZ', // plain text body
-    html: `Hola <b>${paciente},</b> <p>Te recordamos tu próxima cita para el día <b>${fecha}</b> a las <b>${hora}</b> en nuestras instalaciones ubicadas en: <b>${direccion}</b> </p><p>Si no puedes acudir o precisas algún cambio comunícate al número: <b>${telefono}</b>.</p> `, // html body
+    html: `
+    <div style="text-align: center;"> 
+    <img src= "https://i.ibb.co/hLjvrdL/logoANEZ.png width="160" height="150" ><br/><h2>Centro médico ANEZ </h2>
+    </div><br/><br/> <br/><br/>  <br/><br/> 
+    <h3><b>Recordatorio de cita médica</b></h3><br/>
+    <p>Estimado/a <b>${paciente}</b>, </p>
+    <p>Te recordamos tu próxima cita para el día <b>${fecha}</b> a las <b>${hora}</b></p>
+    <p>Si no puedes acudir o precisas algún cambio comunícate al número: <b>${telefono}</b></p>
+    <footer style="text-align: center;"><b>Dirección:</b> ${direccion} &nbsp;&nbsp;&nbsp; <b>Teléfono:</b> 0995363193</footer>
+`, // html body
   });
 
   console.log('Message sent: %s', info.messageId);
